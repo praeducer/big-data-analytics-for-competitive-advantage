@@ -10,3 +10,11 @@ extracting intelligence and value from data.
 4. Using actual business cases/examples, develop data-driven strategies that enhance stakeholder
 relationships, open new market opportunities, and/or better position the organization for
 competitive advantage during industry transition.
+
+## Team Members
+Paul Prae
+Sarah Vasquez
+Joy Pinchback
+Babar Khan
+Daniel Joensen
+Benjamin Adelman
