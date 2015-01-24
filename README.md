@@ -12,9 +12,9 @@ relationships, open new market opportunities, and/or better position the organiz
 competitive advantage during industry transition.
 
 ## Team Members
-Paul Prae
-Sarah Vasquez
-Joy Pinchback
-Babar Khan
-Daniel Joensen
-Benjamin Adelman
++ Paul Prae
++ Sarah Vasquez
++ Joy Pinchback
++ Babar Khan
++ Daniel Joensen
++ Benjamin Adelman
