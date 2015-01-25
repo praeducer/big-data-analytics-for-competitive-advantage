@@ -1,29 +1,32 @@
 # Get and display all links from a web page
 
-#Import resources
+# Import resources
 import urllib.request
+import sys
 from bs4 import BeautifulSoup
 
-#Identify URL
-url="http://www.quora.com/Where-can-I-find-large-datasets-open-to-the-public"
+# Identify URL
+if len(sys.argv) > 1:
+	url = str(sys.argv[1])
+else:
+	url = "http://www.quora.com/Where-can-I-find-large-datasets-open-to-the-public"
 
-#Open and read the URL
+# Open and read the URL
 connection = urllib.request.urlopen(url)
 html = connection.read()
 
-#Scan the page
+# Scan the page
 soupresults = BeautifulSoup(html)
 
-#Start the search
+# Start the search
 links = soupresults.find_all('a')
 
-#Loop start
+# Loop start
 for tag in links:
-    #Make sure this is a link
+    # Make sure this is a link
     link = tag.get('href',None)
-
-    #If it found anything, print it
+    # If it found anything, print it
     if link != None:
-        #an optional a filter for short stuff that shouldn't be included
-        if len(link) > 2:
-            print (link)
+        # Filter out relative links and anchor tags
+        if len(link) > 0 and link[0] != '/' and link[0] != '#':
+            print(link)
