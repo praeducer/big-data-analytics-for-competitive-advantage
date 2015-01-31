@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 # Identify URL
 if len(sys.argv) > 1:
 	url = str(sys.argv[1])
-else:
+else: # Default to
 	url = "http://www.quora.com/Where-can-I-find-large-datasets-open-to-the-public"
 
 # Open and read the URL
@@ -21,6 +21,11 @@ soupresults = BeautifulSoup(html)
 # Start the search
 links = soupresults.find_all('a')
 
+filename = "Output_hw.txt"
+
+#Open file to export
+myfile = open(filename,"w")
+
 # Loop start
 for tag in links:
     # Make sure this is a link
@@ -29,4 +34,7 @@ for tag in links:
     if link != None:
         # Filter out relative links and anchor tags
         if len(link) > 0 and link[0] != '/' and link[0] != '#':
-            print(link)
+            myfile.write(link + '\n')
+
+print("Done Writing to " + filename)
+myfile.close()
