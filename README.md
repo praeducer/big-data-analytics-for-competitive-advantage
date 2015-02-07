@@ -1,5 +1,5 @@
 # Big Data Analytics For Competitive Advantage
-Work from my course titled, "Big Data Analytics For Competitive Advantage". This course provides an introduction to the use of big data analytics as a strategic resource in creating competitive advantage for businesses. A focus is placed on integrating the knowledge of analytics tools with an understanding of how companies could leverage data analytics to gain strategic advantage. An emphasis is placed on developing the ability to think critically about complex problems/questions in real world data science and business analytics (DSBA) challenges.
+Work from a course titled, "Big Data Analytics For Competitive Advantage". This course provides an introduction to the use of big data analytics as a strategic resource in creating competitive advantage for businesses. A focus is placed on integrating the knowledge of analytics tools with an understanding of how companies could leverage data analytics to gain strategic advantage. An emphasis is placed on developing the ability to think critically about complex problems/questions in real world data science and business analytics (DSBA) challenges.
 
 ## Course Objectives
 1. Understand the role of big data analytics in organizational strategy and how organizations can
