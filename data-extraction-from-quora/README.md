@@ -1,4 +1,5 @@
 ## Group Assignment
+Get and display all links from a web page
 Extract links from answers in http://www.quora.com/Where-can-I-find-large-datasets-open-to-the-public
 
 Configuration:
@@ -13,4 +14,4 @@ Contributions:
 + Updated to filter out bad links by Paul Prae.
 + Updated to take in a command line argument by Paul Prae.
 + Updated to output to a text file by Sarah Vasquez.
-+ Consultation provided by Joy Pinchback, Babar Khan, and Daniel 
++ Consultation and design provided by Joy Pinchback, Babar Khan, and Daniel 
