@@ -1,0 +1,5 @@
+### Lessons learned while web mining Wikipedia:
++ The Wikipedia Python API library is not magical. I hardly used it at all. I mostly did standard web mining with Beautiful Soup.
++ Wikipedia pages that are supposed to have the same exact type of content can be formatted completely different. This forces your code to handle several variations. I suspect we will run into this when extracting specific information about films. Each film page could be of a different variety. e.g. Like on several others, formatting on this page http://en.wikipedia.org/wiki/6th_Screen_Actors_Guild_Awards is different from this page http://en.wikipedia.org/wiki/6th_Screen_Actors_Guild_Awards. My code had to take a different approach for each to extract the actors.
++ If any of the html or css I am targeting changes, my code will break. When targeting, be as specific as possible and rely on as few elements and attributes as possible.
++ Sometimes copying and pasting is faster than writing a script but will not be as reproducible. This particular task I tackled was a great learning and portfolio building experience but too tedious for the end result.
