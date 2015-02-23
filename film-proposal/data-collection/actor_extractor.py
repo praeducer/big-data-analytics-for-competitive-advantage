@@ -1,8 +1,5 @@
-# TODO:
-#	Handle special cases for html formatting on some of the pages. e.g.:
-#		http://en.wikipedia.org/wiki/18th_Screen_Actors_Guild_Awards
-#		http://en.wikipedia.org/wiki/17th_Screen_Actors_Guild_Awards
-#	Add in a column for which award ceremony it was, e.g. '17th Screen Actors Guild Awards'. Should just be the title of the wikipedia page. Wikipedia library can do this easy.
+# author: Paul Prae
+# since: 2/21/2015
 
 from bs4 import BeautifulSoup
 import urllib
