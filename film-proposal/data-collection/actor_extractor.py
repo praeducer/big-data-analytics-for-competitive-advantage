@@ -1,13 +1,20 @@
+# description: Web mines actors that won an outstanding performance award from the screen actors guild.
+# output: .csv
 # author: Paul Prae
 # since: 2/21/2015
+# tested with Python 3.3 on CentOS 7
 
+import sys
 from bs4 import BeautifulSoup
 import urllib
 import wikipedia
 
+filename = 'notable_actors.csv'
+outputFile = open(filename,'w');
+
 wikipediaRoot = 'http://en.wikipedia.org';
 actorsAwardPage = wikipediaRoot + '/wiki/Screen_Actors_Guild_Award';
-actorsAwardSoup = BeautifulSoup(urllib.urlopen(actorsAwardPage));
+actorsAwardSoup = BeautifulSoup(urllib.request.urlopen(actorsAwardPage));
 
 winnersForYearsHeader = actorsAwardSoup.find('span', { 'id' : 'List_of_nominees_and_winners'}).parent;
 winnersForYears = winnersForYearsHeader.find_next_sibling('ul');
@@ -19,7 +26,7 @@ for item in winnersForYearsATags:
 
 for winnersForAYearPage in winnersForYearsURLs:
 
-	winnersForAYearSoup = BeautifulSoup(urllib.urlopen(winnersForAYearPage));
+	winnersForAYearSoup = BeautifulSoup(urllib.request.urlopen(winnersForAYearPage));
 	winnersForAYearTitle = winnersForAYearSoup.title.contents[0];
 	winnersForAYearTitle = winnersForAYearTitle.replace(' - Wikipedia, the free encyclopedia','');	
 
@@ -46,17 +53,18 @@ for winnersForAYearPage in winnersForYearsURLs:
 
 	leadMaleActor = leadMaleActorATag['title'];
 	leadMaleActorURL = wikipediaRoot + leadMaleActorATag['href'];
-	print(leadMaleActor + ',' + leadMaleActorURL + ',male,lead,' + winnersForAYearTitle);
+	outputFile.write(leadMaleActor + ',' + leadMaleActorURL + ',male,lead,' + winnersForAYearTitle + '\n');
 	
 	leadFemaleActor = leadFemaleActorATag['title'];
 	leadFemaleActorURL = wikipediaRoot + leadFemaleActorATag['href'];
-	print(leadFemaleActor + ',' + leadFemaleActorURL + ',female,lead,' + winnersForAYearTitle);
+	outputFile.write(leadFemaleActor + ',' + leadFemaleActorURL + ',female,lead,' + winnersForAYearTitle + '\n');
 
 	supportMaleActor = supportMaleActorATag['title'];
 	supportMaleActorURL = wikipediaRoot + supportMaleActorATag['href'];
-	print(supportMaleActor + ',' + supportMaleActorURL + ',male,support,' + winnersForAYearTitle);
+	outputFile.write(supportMaleActor + ',' + supportMaleActorURL + ',male,support,' + winnersForAYearTitle+ '\n');
 
 	supportFemaleActor = supportFemaleActorATag['title'];
 	supportFemaleActorURL = wikipediaRoot + supportFemaleActorATag['href'];
-	print(supportFemaleActor + ',' + supportFemaleActorURL + ',female,support,' + winnersForAYearTitle);
+	outputFile.write(supportFemaleActor + ',' + supportFemaleActorURL + ',female,support,' + winnersForAYearTitle + '\n');
 
+outputFile.close();
