@@ -1,6 +1,7 @@
+name,url,gender,role,event
 'Eddie Redmayne',http://en.wikipedia.org/wiki/Eddie_Redmayne,male,lead,'21st Screen Actors Guild Awards'
 'Julianne Moore',http://en.wikipedia.org/wiki/Julianne_Moore,female,lead,'21st Screen Actors Guild Awards'
-'J. K. Simmons',http://en.wikipedia.org/wiki/J._K._Simmons,male,support,'21st Screen Actors Guild Awards'
+'J K Simmons',http://en.wikipedia.org/wiki/J._K._Simmons,male,support,'21st Screen Actors Guild Awards'
 'Patricia Arquette',http://en.wikipedia.org/wiki/Patricia_Arquette,female,support,'21st Screen Actors Guild Awards'
 'Matthew McConaughey',http://en.wikipedia.org/wiki/Matthew_McConaughey,male,lead,'20th Screen Actors Guild Awards'
 'Cate Blanchett',http://en.wikipedia.org/wiki/Cate_Blanchett,female,lead,'20th Screen Actors Guild Awards'
@@ -72,7 +73,7 @@
 'Kim Basinger',http://en.wikipedia.org/wiki/Kim_Basinger,female,support,'4th Screen Actors Guild Awards'
 'Geoffrey Rush',http://en.wikipedia.org/wiki/Geoffrey_Rush,male,lead,'3rd Screen Actors Guild Awards'
 'Frances McDormand',http://en.wikipedia.org/wiki/Frances_McDormand,female,lead,'3rd Screen Actors Guild Awards'
-'Cuba Gooding Jr.',http://en.wikipedia.org/wiki/Cuba_Gooding_Jr.,male,support,'3rd Screen Actors Guild Awards'
+'Cuba Gooding Jr',http://en.wikipedia.org/wiki/Cuba_Gooding_Jr.,male,support,'3rd Screen Actors Guild Awards'
 'Lauren Bacall',http://en.wikipedia.org/wiki/Lauren_Bacall,female,support,'3rd Screen Actors Guild Awards'
 'Nicolas Cage',http://en.wikipedia.org/wiki/Nicolas_Cage,male,lead,'2nd Screen Actors Guild Awards'
 'Susan Sarandon',http://en.wikipedia.org/wiki/Susan_Sarandon,female,lead,'2nd Screen Actors Guild Awards'
