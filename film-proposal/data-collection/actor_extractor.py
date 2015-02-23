@@ -51,19 +51,19 @@ for winnersForAYearPage in winnersForYearsURLs:
 		supportMaleActorATag = supportMaleActorHeader.find_next('b').find_next('a');
 		supportFemaleActorATag = supportFemaleActorHeader.find_next('b').find_next('a');
 
-	leadMaleActor = leadMaleActorATag['title'].replace('\'', '');
+	leadMaleActor = leadMaleActorATag['title'].replace('\'', '').replace(',', '');
 	leadMaleActorURL = wikipediaRoot + leadMaleActorATag['href'];
 	outputFile.write('\'' + leadMaleActor + '\'' + ',' + leadMaleActorURL + ',male,lead,' + '\'' + winnersForAYearTitle + '\'' + '\n');
 	
-	leadFemaleActor = leadFemaleActorATag['title'].replace('\'', '');
+	leadFemaleActor = leadFemaleActorATag['title'].replace('\'', '').replace(',', '');
 	leadFemaleActorURL = wikipediaRoot + leadFemaleActorATag['href'];
 	outputFile.write('\'' + leadFemaleActor + '\'' + ',' + leadFemaleActorURL + ',female,lead,' + '\'' + winnersForAYearTitle + '\'' + '\n');
 
-	supportMaleActor = supportMaleActorATag['title'].replace('\'', '');
+	supportMaleActor = supportMaleActorATag['title'].replace('\'', '').replace(',', '');
 	supportMaleActorURL = wikipediaRoot + supportMaleActorATag['href'];
 	outputFile.write('\'' + supportMaleActor + '\'' + ',' + supportMaleActorURL + ',male,support,' + '\'' + winnersForAYearTitle+ '\'' + '\n');
 
-	supportFemaleActor = supportFemaleActorATag['title'].replace('\'', '');
+	supportFemaleActor = supportFemaleActorATag['title'].replace('\'', '').replace(',', '');
 	supportFemaleActorURL = wikipediaRoot + supportFemaleActorATag['href'];
 	outputFile.write('\'' + supportFemaleActor + '\'' + ',' + supportFemaleActorURL + ',female,support,' + '\'' + winnersForAYearTitle + '\'' + '\n');
 
