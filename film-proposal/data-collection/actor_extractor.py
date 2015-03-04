@@ -42,11 +42,13 @@ for winnersForAYearPage in winnersForYearsURLs:
 		supportActorsColumns = filmWinnersForAYearRows[3].find_all('td');
 		supportMaleActorATag = supportActorsColumns[0].find_next('a');
 		supportFemaleActorATag = supportActorsColumns[1].find_next('a');
+
 	else:	
 		leadMaleActorHeader = winnersForAYearSoup.find('span', { 'id' : 'Outstanding_Performance_by_a_Male_Actor_in_a_Leading_Role'});
 		leadFemaleActorHeader = winnersForAYearSoup.find('span', { 'id' : 'Outstanding_Performance_by_a_Female_Actor_in_a_Leading_Role'});
 		supportMaleActorHeader = winnersForAYearSoup.find('span', { 'id' : 'Outstanding_Performance_by_a_Male_Actor_in_a_Supporting_Role'});
 		supportFemaleActorHeader = winnersForAYearSoup.find('span', { 'id' : 'Outstanding_Performance_by_a_Female_Actor_in_a_Supporting_Role'});
+		
 		leadMaleActorATag = leadMaleActorHeader.find_next('b').find_next('a');
 		leadFemaleActorATag = leadFemaleActorHeader.find_next('b').find_next('a');
 		supportMaleActorATag = supportMaleActorHeader.find_next('b').find_next('a');
