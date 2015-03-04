@@ -1,0 +1,91 @@
+query: Gone with the Wind (film)
+	result-> http://en.wikipedia.org/wiki/Gone_with_the_Wind_(film)
+query: Star Wars (film)
+	result-> http://en.wikipedia.org/wiki/Star_Wars_(film)
+query: The Sound of Music (film)
+	result-> http://en.wikipedia.org/wiki/The_Sound_of_Music_(film)
+query: E.T. the Extra-Terrestrial (film)
+	result-> http://en.wikipedia.org/wiki/1982_New_York_Film_Critics_Circle_Awards
+query: Titanic (film)
+	option: Sinking of the RMS Titanic
+	option: RMS Titanic Inc.
+	option: Titanic (1915 film)
+		result-> http://en.wikipedia.org/wiki/Titanic_(1915_film)
+query: The Ten Commandments (film)
+	option: Ritual Decalogue
+	option: Ten Commandments for Drivers
+	option: Ten Commandments of Computer Ethics
+	option: Hutu Ten Commandments
+	option: Alternatives to the Ten Commandments
+	option: The Ten Commandments of the Mafia
+	option: The Ten Commandments (1923 film)
+		result-> http://en.wikipedia.org/wiki/The_Ten_Commandments_(1923_film)
+query: Jaws (film)
+	result-> http://en.wikipedia.org/wiki/Jaws_(film)
+query: Doctor Zhivago (film)
+	result-> http://en.wikipedia.org/wiki/Doctor_Zhivago_(film)
+query: The Exorcist (film)
+	result-> http://en.wikipedia.org/wiki/The_Exorcist_(film)
+query: Snow White and the Seven Dwarfs (film)
+	option: Snow-White and Rose-Red
+	option: Snow White (Fables)
+	option: Donald Barthelme
+	option: Snow-White-Fire-Red
+	option: Varda
+	option: Snow White (1902 film)
+		result-> http://en.wikipedia.org/wiki/Snow_White_(1902_film)
+query: One Hundred and One Dalmatians (film)
+	result-> http://en.wikipedia.org/wiki/One_Hundred_and_One_Dalmatians
+query: The Empire Strikes Back (film)
+	result-> http://en.wikipedia.org/wiki/Yoda_(song)
+query: Ben-Hur (film)
+	option: Ben-Hur: A Tale of the Christ
+	option: Ben-Hur (play)
+	option: Ben Hur (1907 film)
+		result-> http://en.wikipedia.org/wiki/Ben_Hur_(1907_film)
+query: Avatar (film)
+	option: Avatar (computing)
+	option: Avatar (1916 film)
+		result-> http://en.wikipedia.org/wiki/Avatar_(1916_film)
+query: Return of the Jedi (film)
+	result-> http://en.wikipedia.org/wiki/Peter_Diamond_(actor)
+query: Jurassic Park (film)
+	result-> http://en.wikipedia.org/wiki/Jurassic_Park_(film)
+query: Star Wars Episode I: The Phantom Menace (film)
+	result-> http://en.wikipedia.org/wiki/Silas_Carson
+query: The Lion King (film)
+	result-> http://en.wikipedia.org/wiki/The_Lion_King
+query: The Sting (film)
+	result-> http://en.wikipedia.org/wiki/The_Sting_(1992_film)
+query: Raiders of the Lost Ark (film)
+	result-> http://en.wikipedia.org/wiki/Raiders_of_the_Lost_Ark_(soundtrack)
+query: The Graduate (film)
+	result-> http://en.wikipedia.org/wiki/The_Graduate
+query: Fantasia (film)
+	option: Fantasia (singer)
+	option: Rick Fantasia
+	option: Fantasia (music)
+	option: Fantasia contrappuntistica
+	option: Fantasia on a Theme by Thomas Tallis
+	option: Fantasia para un Gentilhombre
+	option: Fantasia No. 3 (Mozart)
+	option: Fantasia in F minor (Schubert)
+	option: Fantasia (Fantasia Barrino album)
+	option: Fantasia (Yolandita Monge album)
+	option: Fantasía (Franco De Vita album)
+	option: Yuja Wang
+	option: The Divine Wings of Tragedy
+	option: "Cantaloop" (Flip Fantasia)
+	option: Nella Fantasia
+	option: Mario Merola
+	option: The Perth County Conspiracy
+	option: Matia Bazar
+	option: Sky (band)
+	option: Fantasia (1940 film)
+		result-> http://en.wikipedia.org/wiki/Fantasia_(1940_film)
+query: The Godfather (film)
+	result-> http://en.wikipedia.org/wiki/The_Godfather
+query: Forrest Gump (film)
+	result-> http://en.wikipedia.org/wiki/Forrest_Gump
+query: Mary Poppins (film)
+	result-> http://en.wikipedia.org/wiki/Mary_Poppins_(film)
