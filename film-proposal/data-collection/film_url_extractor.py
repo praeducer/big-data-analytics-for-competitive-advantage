@@ -11,18 +11,47 @@ import wikipedia
 
 filename = './data/film_urls.csv'
 outputFile = open(filename,'w');
-outputFile.write('title,year,url,group\n');
+outputFile.write('title,year,url,source\n');
 
-wikipediaRoot = 'http://en.wikipedia.org/wiki/';
-listOfFilmsPrefix = wikipediaRoot + 'List_of_films:';
+wikipediaRoot = 'http://en.wikipedia.org';
+listOfFilmsPath = '/wiki/List_of_films:';
 # start here
-currentListOfFilmsIndex = '_numbers';
-currentListOfFilmsURL = listOfFilmsPrefix + currentListOfFilmsIndex;
-listOfFilmsSoup = BeautifulSoup(urllib.request.urlopen(currentListOfFilmsURL));
+currentListOfFilmsHref = listOfFilmsPath + '_numbers';
+listOfFilmsURLs = [];
+listOfFilmsURLs.append(wikipediaRoot + currentListOfFilmsHref);
+listOfFilmsSoup = BeautifulSoup(urllib.request.urlopen(listOfFilmsURLs[0]));
 
 filmIndexTable = listOfFilmsSoup.find('table', { 'class' : 'wikitable'});
+filmIndexTableRows = filmIndexTable.findAll('tr');
+for filmIndexTableRow in filmIndexTableRows:
+	filmIndexTableCols = filmIndexTableRow.findAll('td');
+	for filmIndexTableCol in filmIndexTableCols:
+		filmIndexTableColATag = filmIndexTableCol.find('a');
+		if filmIndexTableColATag:
+			filmIndexHref = filmIndexTableCol.find('a').get('href'); 
+			if listOfFilmsPath in filmIndexHref:
+				listOfFilmsURLs.append(wikipediaRoot + filmIndexHref);
 
-print(filmIndexTable);	
+# indexed by wikipedia URL to prevent duplicates
+filmDataByURL = {};
+
+for listOfFilmsURL in listOfFilmsURLs:
+	listOfFilmsSoup = BeautifulSoup(urllib.request.urlopen(listOfFilmsURL));
+	listOfFilmsITags = listOfFilmsSoup.findAll('i');
+	for listOfFilmsITag in listOfFilmsITags:
+		if listOfFilmsITag.a:
+			filmTitle = listOfFilmsITag.a.get('title');
+			iTagContents = listOfFilmsITag.parent.contents;
+			if len(iTagContents) > 1:
+				filmYear = listOfFilmsITag.parent.contents[1];
+				filmYear = filmYear.replace(' ', '').replace('(','').replace(')','');
+			else:
+				filmYear = 'null';
+			filmURL = wikipediaRoot + listOfFilmsITag.a.get('href');
+			filmData = [{'title' : filmTitle}, {'year' : filmYear}, {'source' : listOfFilmsURL}];
+			filmDataByURL[filmURL] = filmData;
+	
+		break;
 
 # outputFile.write('\'' + filmTitle + '\'' + ',' + filmYear + ',' + filmUrl + ',' + currentListOfFilmsIndex + '\n');
 
