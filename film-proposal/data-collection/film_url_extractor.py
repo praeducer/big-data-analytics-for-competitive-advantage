@@ -1,7 +1,7 @@
-# description: Web mines actors that won an outstanding performance award from the screen actors guild.
+# description: Web mines urls for all films on wikipedia.
 # output: .csv
 # author: Paul Prae
-# since: 2/21/2015
+# since: 3/7/2015
 # tested with Python 3.3 on CentOS 7
 
 import sys
