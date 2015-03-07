@@ -11,7 +11,7 @@ import wikipedia
 
 filename = './data/film_urls.csv'
 outputFile = open(filename,'w');
-outputFile.write('title,year,url,source\n');
+outputFile.write('url,title,year\n');
 
 wikipediaRoot = 'http://en.wikipedia.org';
 listOfFilmsPath = '/wiki/List_of_films:';
@@ -40,7 +40,7 @@ for listOfFilmsURL in listOfFilmsURLs:
 	listOfFilmsITags = listOfFilmsSoup.findAll('i');
 	for listOfFilmsITag in listOfFilmsITags:
 		if listOfFilmsITag.a:
-			filmTitle = listOfFilmsITag.a.get('title');
+			filmTitle = listOfFilmsITag.a.get('title').replace(',','');
 			iTagContents = listOfFilmsITag.parent.contents;
 			if len(iTagContents) > 1:
 				filmYear = listOfFilmsITag.parent.contents[1];
@@ -48,12 +48,14 @@ for listOfFilmsURL in listOfFilmsURLs:
 			else:
 				filmYear = 'null';
 			filmURL = wikipediaRoot + listOfFilmsITag.a.get('href');
-			filmData = [{'title' : filmTitle}, {'year' : filmYear}, {'source' : listOfFilmsURL}];
+			filmData = {'title' : filmTitle, 'year' : filmYear};
 			filmDataByURL[filmURL] = filmData;
-	
-		break;
-
-# outputFile.write('\'' + filmTitle + '\'' + ',' + filmYear + ',' + filmUrl + ',' + currentListOfFilmsIndex + '\n');
+	break;
+# Had to add this extra for loop and a dict because there were duplicate links
+for filmURL, filmData in filmDataByURL.items():
+	filmTitle = filmData['title'];
+	filmYear = filmData['year'];
+	outputFile.write( filmURL + ',' + '\'' + filmTitle + '\'' + ',' + filmYear + '\n');
 
 outputFile.close();
 
