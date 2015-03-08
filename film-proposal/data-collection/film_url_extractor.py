@@ -40,7 +40,8 @@ for listOfFilmsURL in listOfFilmsURLs:
 	listOfFilmsITags = listOfFilmsSoup.findAll('i');
 	for listOfFilmsITag in listOfFilmsITags:
 		if listOfFilmsITag.a:
-			filmTitle = listOfFilmsITag.a.get('title').replace(',','');
+			filmTitle = listOfFilmsITag.a.get('title');
+			filmTitle = filmTitle.replace(',','').replace('\'','').replace('"','');
 			iTagContents = listOfFilmsITag.parent.contents;
 			if len(iTagContents) > 1:
 				filmYear = listOfFilmsITag.parent.contents[1];
@@ -50,7 +51,7 @@ for listOfFilmsURL in listOfFilmsURLs:
 			filmURL = wikipediaRoot + listOfFilmsITag.a.get('href');
 			filmData = {'title' : filmTitle, 'year' : filmYear};
 			filmDataByURL[filmURL] = filmData;
-	break;
+
 # Had to add this extra for loop and a dict because there were duplicate links
 for filmURL, filmData in filmDataByURL.items():
 	filmTitle = filmData['title'];
