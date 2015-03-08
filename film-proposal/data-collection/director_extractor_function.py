@@ -8,18 +8,27 @@ from bs4 import BeautifulSoup
 import urllib
 import wikipedia
 
-filmURL = 'http://en.wikipedia.org/wiki/Avatar_(2009_film)'
+filmURLs = [
+'http://en.wikipedia.org/wiki/Planes_(film)'
+]
 
-def director_extractor(filmURL):
-	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
-	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
-	summaryTableRows = summaryTable.find_all('tr');
+for filmURL in filmURLs:
+	def director_extractor(filmURL):
+		filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
+		summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+		summaryTableRows = summaryTable.find_all('tr');
 
-	for row in summaryTableRows:
-		if 'Directed' in row.text:
-			directorNameATag = row.find('a');
-			directorName = directorNameATag['title'] 
-			return directorName;
+		directorNames = [];
 
-directorName = director_extractor(filmURL);
-print(directorName);
+		for row in summaryTableRows:
+			if 'Directed' in row.text:
+				directorNameATags = row.find_all('a');
+				#print(directorNameATags);
+				for tag in directorNameATags:
+					directorName = tag['title'];
+					directorNames.append(directorName);
+
+		return directorNames;
+
+	directorNames = director_extractor(filmURL);
+	print(directorNames);
