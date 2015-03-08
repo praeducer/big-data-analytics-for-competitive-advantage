@@ -62,7 +62,7 @@ def parseITag(iTag):
 	if not filmYear:
 		filmYear = 'null';
 	filmURL = wikipediaRoot + listOfFilmsITag.a.get('href');
-	filmURL = filmURL.replace(' ', '').replace('(','').replace(')','');
+	filmURL = filmURL.replace(',','');
 	filmData = {'url' : filmURL, 'title' : filmTitle, 'year' : filmYear};
 	return filmData;
 
