@@ -3,6 +3,7 @@
 # author: Paul Prae
 # since: 3/7/2015
 # tested with Python 3.3 on CentOS 7
+# TODO: Handle commas in URLs better, handle a range of years, detect series' URLs.
 
 import sys
 from bs4 import BeautifulSoup
