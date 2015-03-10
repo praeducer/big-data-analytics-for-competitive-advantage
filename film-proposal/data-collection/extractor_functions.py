@@ -111,6 +111,7 @@ filmURLs = [
 'http://en.wikipedia.org/wiki/Sally_(1929_film)'
 ]
 
+
 wikipediaRoot = 'http://en.wikipedia.org';
 
 for filmURL in filmURLs:
@@ -161,6 +162,36 @@ for filmURL in filmURLs:
 
 		return actorNames;
 
-	actorNames = actor_extractor(filmURL);
-	for actorName in actorNames:
-		print(actorName);
+	def production_company_extractor(filmURL):
+		filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
+		summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+		
+		companyNames = [];
+
+		try:
+			summaryTableRows = summaryTable.find_all('tr');
+
+			for row in summaryTableRows:
+				if 'Distributed' in row.text:
+					companyNameATags = row.find_all('a');
+					if not companyNameATags:
+						companyName = row.text.replace(',','').replace('\'','').replace('"','');
+						companyName = companyName.replace('\n','').replace('Distributed by','');
+						companyURL = 'null';
+						companyTuple = {'name': companyName, 'url': companyURL};
+						companyNames.append(companyTuple);
+					else:
+						for tag in companyNameATags:
+							if tag['href'][0] == "/":			
+								companyName = tag['title'].replace(',','').replace('\'','').replace('"','');
+								companyURL = wikipediaRoot + tag['href'].replace(',','').replace('\'','').replace('"','');
+								companyTuple = {'name': companyName, 'url': companyURL};
+								companyNames.append(companyTuple);
+		except AttributeError:
+			companyNames.append("null");
+
+		return companyNames;
+
+	companyNames = production_company_extractor(filmURL);
+	for companyName in companyNames:
+		print(companyName);
