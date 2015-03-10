@@ -18,14 +18,14 @@ def budget_extractor(filmURL):
 	for row in summaryTableRows:
 		if 'Budget' in row.text:
 			budgetText = row.text;
-			temp = budgetText.strip();
-            temp = temp.replace('\n','');
-            if 'million' in temp:
-                temp = temp.split('$')[-1].split('[')[0].replace('million','').strip();
-                temp = temp;
-            elif '$' in temp:
-                temp = temp.split('$')[-1].split('[')[0].replace(',','');
-			return temp;
+			budgetText = budgetText.strip();
+			budgetText = budgetText.replace('\n','');
+			if 'million' in budgetText:
+				budgetText = budgetText.split('$')[1].split('[')[0].replace('million','').strip();
+				budgetText = budgetText + ',000,000';
+#			elif '$' in budgetText:
+#				budgetText = budgetText.split('$')[-1].split('[')[0].replace(',','');
+			return budgetText;
 
 filmBudget = budget_extractor(filmURL);
 print(filmBudget);
