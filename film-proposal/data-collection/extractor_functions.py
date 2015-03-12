@@ -123,24 +123,37 @@ for filmURL in filmURLs:
 				filmBudget = row.text;
 				filmBudget = filmBudget.strip();
 				filmBudget = filmBudget.replace('\n','');
-				if 'million' in filmBudget:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').strip();
-					filmBudget = filmBudget + ',000,000';
-					filmBudgets.append(filmBudget);
-				elif 'thousand' in filmBudget:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
-					filmBudget = filmBudget + ',000';
-					filmBudgets.append(filmBudget);
+				decimalFind = filmBudget.find('.');
+				if decimalFind == -1:
+					if 'million' in filmBudget:
+						filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').strip();
+						filmBudget = filmBudget + ',000,000';
+						filmBudgets.append(filmBudget);
+					elif 'thousand' in filmBudget:
+						filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
+						filmBudget = filmBudget + ',000';
+						filmBudgets.append(filmBudget);
+					else:
+						filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
+						filmBudgets.append(filmBudget);
 				else:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
-					filmBudgets.append(filmBudget);
-
+					if 'million' in filmBudget:
+						filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace('.',',').strip();
+						filmBudget = filmBudget + '00,000';
+						filmBudgets.append(filmBudget);
+					elif 'thousand' in filmBudget:
+						filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').replace('.',',').strip();
+						filmBudget = filmBudget + '00';
+						filmBudgets.append(filmBudget);
+					else:
+						filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
+						filmBudgets.append(filmBudget);
 		return filmBudgets;
 
 #	filmBudgets = budget_extractor(filmURL);
 #	print(filmBudgets);
 	
 
-	companyNames = distribution_company_extractor(filmURL);
-	for companyName in companyNames:
-		print(companyName);
+	actorNames = actor_extractor(filmURL);
+	for actorName in actorNames:
+		print(actorName);
