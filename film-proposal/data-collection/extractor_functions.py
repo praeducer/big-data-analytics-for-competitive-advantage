@@ -50,14 +50,14 @@ def actor_extractor(filmPageSoup):
 			if 'Starring' in row.text:
 				actorNameATags = row.find_all('a');
 				if not actorNameATags:
-					actorName = row.text.replace(',','').replace('\'','').replace('"','').replace(' (page does not exist)','').replace(' (actor)','');
+					actorName = row.text.replace(',','').replace('\'','').replace('"','').replace(' (page does not exist)','').replace(' (actor)','').replace('\u0107','c');
 					actorURL = 'null'
 					actorTuple = {'name': actorName, 'url': actorURL};
 					actorData.append(actorTuple);
 				else:
 					for tag in actorNameATags:
 						if tag['href'][0] == "/":			
-							actorName = tag['title'].replace(',','').replace('\'','').replace('"','').replace(' (page does not exist)','').replace(' (actor)','');
+							actorName = tag['title'].replace(',','').replace('\'','').replace('"','').replace(' (page does not exist)','').replace(' (actor)','').replace('\u0107','c');
 							actorURL = wikipediaRoot + tag['href'].replace(',','').replace('\'','').replace('"','');
 							actorTuple = {'name': actorName, 'url': actorURL};
 							actorData.append(actorTuple);
@@ -96,64 +96,75 @@ def distribution_company_extractor(filmPageSoup):
 
 def budget_extractor(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
-	summaryTableRows = summaryTable.find_all('tr');
 
 	filmBudgets = [];
 
-	for row in summaryTableRows:
-		if 'Budget' in row.text:
-			filmBudget = row.text;
-			filmBudget = filmBudget.strip();
-			filmBudget = filmBudget.replace('\n','');
-			decimalFind = filmBudget.find('.');
-			if decimalFind == -1:
-				if 'million' in filmBudget:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').strip();
-					filmBudget = filmBudget + ',000,000';
-					filmBudgets.append(filmBudget);
-				elif 'thousand' in filmBudget:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
-					filmBudget = filmBudget + ',000';
-					filmBudgets.append(filmBudget);
-				else:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
-					filmBudgets.append(filmBudget);
-			else:
-				if 'million' in filmBudget:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace('.',',').strip();
-					filmBudget = filmBudget + '00,000';
-					filmBudgets.append(filmBudget);
-				elif 'thousand' in filmBudget:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').replace('.',',').strip();
-					filmBudget = filmBudget + '00';
-					filmBudgets.append(filmBudget);
-				else:
-					filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
-					filmBudgets.append(filmBudget);
+	try:
+		summaryTableRows = summaryTable.find_all('tr');
+
+		for row in summaryTableRows:
+			if 'Budget' in row.text:
+				filmBudget = row.text;
+				filmBudget = filmBudget.strip();
+				filmBudget = filmBudget.replace('\n','');
+				decimalFind = filmBudget.find('.');
+				poundFind = filmBudget.find('£');
+				if poundFind == -1:
+					if decimalFind == -1:
+						if 'million' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').strip();
+							filmBudget = filmBudget + ',000,000';
+							filmBudgets.append(filmBudget);
+						elif 'thousand' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
+							filmBudget = filmBudget + ',000';
+							filmBudgets.append(filmBudget);
+						else:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
+							filmBudgets.append(filmBudget);
+					else:
+						if 'million' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace('.',',').strip();
+							filmBudget = filmBudget + '00,000';
+							filmBudgets.append(filmBudget);
+						elif 'thousand' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').replace('.',',').strip();
+							filmBudget = filmBudget + '00';
+							filmBudgets.append(filmBudget);
+						else:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
+							filmBudgets.append(filmBudget);
+	except AttributeError:
+		filmBudgets.append("null");
+
 	return filmBudgets;
 
+"""
+URL's with Errors, fix later!
+'http://en.wikipedia.org/wiki/Harry_Potter_and_the_Philosopher%27s_Stone_(film)'
+"""
 filmURLs = [
-'http://en.wikipedia.org/wiki/Dutch_(film)',
-'http://en.wikipedia.org/wiki/Robots_(2005_film)',
-'http://en.wikipedia.org/wiki/Deep_Rising',
-'http://en.wikipedia.org/wiki/Rob_Roy_(1995_film)'
+'http://en.wikipedia.org/wiki/Avatar_(2009_film)'
 ]
 
 for filmURL in filmURLs:
-	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
-	directorData = director_extractor(filmPageSoup);
-	filmBudgets = budget_extractor(filmPageSoup);
-	distributionCompanyData = distribution_company_extractor(filmPageSoup);
-	actorData = actor_extractor(filmPageSoup);
-	for directorTuple in directorData:
-		print('Director: ');
-		print(directorTuple);
-	for filmBudget in filmBudgets:
-		print('Budget: ');
-		print(filmBudget);
-	for companyTuple in distributionCompanyData:
-		print('Production Company: ');
-		print(companyTuple);
-	for actorTuple in actorData:
-		print('Actor: ');
-		print(actorTuple);
+	try:
+		filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
+		directorData = director_extractor(filmPageSoup);
+		filmBudgets = budget_extractor(filmPageSoup);
+		distributionCompanyData = distribution_company_extractor(filmPageSoup);
+		actorData = actor_extractor(filmPageSoup);
+		for directorTuple in directorData:
+			print('Director: ');
+			print(directorTuple);
+		for filmBudget in filmBudgets:
+			print('Budget: ');
+			print(filmBudget);
+		for companyTuple in distributionCompanyData:
+			print('Production Company: ');
+			print(companyTuple);
+		for actorTuple in actorData:
+			print('Actor: ');
+			print(actorTuple);
+	except:
+		print('no web page');
