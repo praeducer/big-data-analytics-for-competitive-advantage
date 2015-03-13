@@ -23,10 +23,10 @@ directorSoup = BeautifulSoup(urllib.request.urlopen(directorPage));
 directorList = directorSoup.find('div',{ 'class' : 'div-col columns column-count column-count-2'});
 directorListItems = directorList.find_all('li');
 
-
 for item in directorListItems:	
 	directorNameATag = item.find_next('a');
 	directorName = directorNameATag['title'].replace('\'', '').replace(',', '').replace('.', '').replace('\u015b','s').replace('\u014d','s').replace('\u0159','r');
+	directorName = directorName.replace(' (director)','').replace(' (filmmaker','');
 	directorURL = wikipediaRoot + directorNameATag['href'].replace(',', '');
 	outputFile.write('\'' + directorName + '\'' + ',' + directorURL + '\'' + '\n');
 
