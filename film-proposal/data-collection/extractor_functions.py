@@ -7,6 +7,7 @@ import sys
 from bs4 import BeautifulSoup
 import urllib
 import wikipedia
+from datetime import datetime
 
 wikipediaRoot = 'http://en.wikipedia.org';
 
@@ -97,7 +98,7 @@ def distribution_company_extractor(filmPageSoup):
 def budget_extractor(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 
-	filmBudgets = [];
+	budgetData = [];
 
 	try:
 		summaryTableRows = summaryTable.find_all('tr');
@@ -114,57 +115,124 @@ def budget_extractor(filmPageSoup):
 						if 'million' in filmBudget:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').strip();
 							filmBudget = filmBudget + ',000,000';
-							filmBudgets.append(filmBudget);
+							budgetData.append(filmBudget);
 						elif 'thousand' in filmBudget:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
 							filmBudget = filmBudget + ',000';
-							filmBudgets.append(filmBudget);
+							budgetData.append(filmBudget);
 						else:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
-							filmBudgets.append(filmBudget);
+							budgetData.append(filmBudget);
 					else:
 						if 'million' in filmBudget:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace('.',',').strip();
 							filmBudget = filmBudget + '00,000';
-							filmBudgets.append(filmBudget);
+							budgetData.append(filmBudget);
 						elif 'thousand' in filmBudget:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').replace('.',',').strip();
 							filmBudget = filmBudget + '00';
-							filmBudgets.append(filmBudget);
+							budgetData.append(filmBudget);
 						else:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
-							filmBudgets.append(filmBudget);
+							budgetData.append(filmBudget);
 	except AttributeError:
-		filmBudgets.append("null");
+		budgetData.append("null");
 
-	return filmBudgets;
+	return budgetData;
+
+
+def revenue_extractor(filmPageSoup):
+	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+
+	revenueData = [];
+
+	try:
+		summaryTableRows = summaryTable.find_all('tr');
+
+		for row in summaryTableRows:
+			if 'Box' in row.text:
+				filmRevenue = row.text;
+				filmRevenue = filmRevenue.strip();
+				filmRevenue = filmRevenue.replace('\n','');
+				poundFind = filmRevenue.find('£');
+				#purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
+				if poundFind == -1:
+					filmRevenue = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
+					revenueData.append(filmRevenue);
+	except AttributeError:
+		revenueData.append("null");
+
+	return revenueData;
+
+def release_date_extractor(filmPageSoup):
+	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+
+	try:
+		summaryTableRows = summaryTable.find_all('tr');
+		for row in summaryTableRows:
+			if 'Release' in row.text:
+				dateRow = summaryTable.find('span',{ 'class' : 'bday dtstart published updated'});
+				releaseDate = dateRow.text;
+				releaseDate = releaseDate.strip();
+				releaseDate = releaseDate.replace('\n','');
+
+	except AttributeError:
+		releaseDate = ("null");
+
+#Still need to handle films that list multiple dates, commonly for different countries
+
+	return releaseDate;
 
 """
 URL's with Errors, fix later!
+
 'http://en.wikipedia.org/wiki/Harry_Potter_and_the_Philosopher%27s_Stone_(film)'
+
+Revenue function errors:
+'http://en.wikipedia.org/wiki/Who%27s_Minding_the_Store%3F'
+
 """
+
 filmURLs = [
-'http://en.wikipedia.org/wiki/Avatar_(2009_film)'
+'http://en.wikipedia.org/wiki/Talladega_Nights:_The_Ballad_of_Ricky_Bobby',
+'http://en.wikipedia.org/wiki/Gokulamlo_Seetha',
+'http://en.wikipedia.org/wiki/Grain_in_Ear',
+'http://en.wikipedia.org/wiki/Scarlet_Sails_(film)',
+'http://en.wikipedia.org/wiki/A_Question_of_Taste',
+'http://en.wikipedia.org/wiki/Uniform_(film)',
+'http://en.wikipedia.org/wiki/City_Slickers',
+'http://en.wikipedia.org/wiki/Die_Sehnsucht_der_Veronika_Voss',
+'http://en.wikipedia.org/wiki/Lenny_(film)',
+'http://en.wikipedia.org/wiki/The_White_Sheik',
+'http://en.wikipedia.org/wiki/Doom_(film)',
+'http://en.wikipedia.org/wiki/It_Happened_in_Brooklyn',
+'http://en.wikipedia.org/wiki/Dead_or_Alive_(film)',
+'http://en.wikipedia.org/wiki/Batman:_New_Times',
+'http://en.wikipedia.org/wiki/Quel_maledetto_treno_blindato',
+'http://en.wikipedia.org/wiki/Teenage_Mutant_Ninja_Turtles_III',
+'http://en.wikipedia.org/wiki/Desert_Fury',
+'http://en.wikipedia.org/wiki/Farewell_My_Lovely_(1975_film)',
+'http://en.wikipedia.org/wiki/Light_Sleeper',
+'http://en.wikipedia.org/wiki/The_Awakening_(2011_film)',
+'http://en.wikipedia.org/wiki/Duck_and_Cover_(film)',
+'http://en.wikipedia.org/wiki/I_Wanna_Hold_Your_Hand_(film)',
+'http://en.wikipedia.org/wiki/Legend_(1985_film)',
+'http://en.wikipedia.org/wiki/Enchanted_(film)',
+'http://en.wikipedia.org/wiki/Clean_and_Sober',
+'http://en.wikipedia.org/wiki/A_Summer_Place_(film)',
+'http://en.wikipedia.org/wiki/Whoopee!_(film)',
+'http://en.wikipedia.org/wiki/I_Eat_Your_Skin'
+
 ]
 
 for filmURL in filmURLs:
-	try:
-		filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
-		directorData = director_extractor(filmPageSoup);
-		filmBudgets = budget_extractor(filmPageSoup);
-		distributionCompanyData = distribution_company_extractor(filmPageSoup);
-		actorData = actor_extractor(filmPageSoup);
-		for directorTuple in directorData:
-			print('Director: ');
-			print(directorTuple);
-		for filmBudget in filmBudgets:
-			print('Budget: ');
-			print(filmBudget);
-		for companyTuple in distributionCompanyData:
-			print('Production Company: ');
-			print(companyTuple);
-		for actorTuple in actorData:
-			print('Actor: ');
-			print(actorTuple);
-	except:
-		print('no web page');
+
+	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
+	directorData = director_extractor(filmPageSoup);
+	budgetData = budget_extractor(filmPageSoup);
+	distributionCompanyData = distribution_company_extractor(filmPageSoup);
+	actorData = actor_extractor(filmPageSoup);
+	revenueData = revenue_extractor(filmPageSoup);
+	releaseDate = release_date_extractor(filmPageSoup);
+	print('Release Date: ');
+	print(releaseDate);
