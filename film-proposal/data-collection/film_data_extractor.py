@@ -82,7 +82,7 @@ def budget_extractor(filmPageSoup):
 def revenue_extractor(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 
-	revenueData = [];
+	revenueData = "";
 
 	try:
 		summaryTableRows = summaryTable.find_all('tr');
@@ -93,14 +93,13 @@ def revenue_extractor(filmPageSoup):
 				filmRevenue = filmRevenue.strip();
 				filmRevenue = filmRevenue.replace('\n','');
 				poundFind = filmRevenue.find('£');
-				#purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
+				# TODO: purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
 				if poundFind == -1:
-					filmRevenue = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
-					revenueData.append(filmRevenue);
+					revenueData = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
 	except (AttributeError,IndexError):
-		revenueData.append("null");
+		revenueData = "null";
 
-	return revenueData;
+	return revenueData.replace(',','');
 
 def director_extractor(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});	
@@ -292,7 +291,7 @@ if __name__=="__main__":
 
 	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
 	filmIndex = build_film_index();
-	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'director', 'actor', 'distributor', 'genre']);
+	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre']);
 	relativeFilmFilePath = './data/films/test/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
@@ -310,7 +309,16 @@ if __name__=="__main__":
 		filmDate = release_date_extractor(filmPageSoup);
 		if not filmDate:
 			filmDate = 'null';
-		
+
+		budgetValue = budget_extractor(filmPageSoup);
+		if not budgetValue:
+			budgetValue = 'null';
+		budgetValue = budgetValue.replace(',','');
+
+		revenueValue = revenue_extractor(filmPageSoup);
+		if not revenueValue:
+			revenueValue = 'null'; 
+
 		directorData = director_extractor(filmPageSoup);
 		directorValue = tuples_to_column_value(directorData);
 		if not directorValue:
@@ -343,6 +351,6 @@ if __name__=="__main__":
 			else:
 				filmTitle = 'null';
 				filmYear = 'null';
-			filmWriter.writerow([filmTitle, filmURL, filmDate, filmYear, directorValue, actorValue, distributionValue, genreValue]);
+			filmWriter.writerow([filmTitle, filmURL, filmDate, filmYear, budgetValue, revenueValue, directorValue, actorValue, distributionValue, genreValue]);
 		except KeyError:
 			pass;
