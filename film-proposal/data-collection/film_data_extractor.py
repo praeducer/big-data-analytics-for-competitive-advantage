@@ -173,15 +173,20 @@ def genre_extractor(filmPageSoup):
 
 	return genreList;
 
-def list_to_column_value(notableData):
+def tuples_to_column_value(notableData):
 	pipesAndTuples = "";
-	
 	for notableTuple in notableData:
 		notableName = notableTuple['name'];
 		notableURL = notableTuple['url'];
 		pipesAndTuples += notableName + ';' + notableURL + '|';
 	# Removing last pipe
 	return pipesAndTuples[:-1];
+
+def list_to_column_value(dataList):
+	columnValue = "";
+	for item in dataList:
+		columnValue += item + '|';
+	return columnValue[:-1];
 
 def build_film_index():
 	filmIndex = {};
@@ -198,7 +203,7 @@ if __name__=="__main__":
 
 	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
 	filmIndex = build_film_index();
-	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'director', 'actor', 'distributor']);
+	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'director', 'actor', 'distributor', 'genre']);
 	relativeFilmFilePath = './data/films/test/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
@@ -218,19 +223,24 @@ if __name__=="__main__":
 			filmDate = 'null';
 		
 		directorData = director_extractor(filmPageSoup);
-		directorValue = list_to_column_value(directorData);
+		directorValue = tuples_to_column_value(directorData);
 		if not directorValue:
 			directorValue = 'null';
 
 		actorData = actor_extractor(filmPageSoup);
-		actorValue = list_to_column_value(actorData);
+		actorValue = tuples_to_column_value(actorData);
 		if not actorValue:
 			actorValue = 'null';		
 
 		distributionData = distribution_company_extractor(filmPageSoup);
-		distributionValue = list_to_column_value(distributionData);
+		distributionValue = tuples_to_column_value(distributionData);
 		if not distributionValue:
 			distributionValue = 'null';
+
+		genreData = genre_extractor(filmPageSoup);
+		genreValue = list_to_column_value(genreData);
+		if not genreValue:
+			genreValue = 'null';
 
 		try:
 			filmData = filmIndex.get(filmURL);
@@ -244,6 +254,6 @@ if __name__=="__main__":
 			else:
 				filmTitle = 'null';
 				filmYear = 'null';
-			filmWriter.writerow([filmTitle, filmURL, filmDate, filmYear, directorValue, actorValue, distributionValue]);
+			filmWriter.writerow([filmTitle, filmURL, filmDate, filmYear, directorValue, actorValue, distributionValue, genreValue]);
 		except KeyError:
 			pass;
