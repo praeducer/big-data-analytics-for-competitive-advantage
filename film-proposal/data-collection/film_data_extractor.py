@@ -93,6 +93,24 @@ def distribution_company_extractor(filmPageSoup):
 
 	return distributionCompanyData;
 
+# TODO: Still need to handle films that list multiple dates, commonly for different countries
+def release_date_extractor(filmPageSoup):
+	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+
+	try:
+		summaryTableRows = summaryTable.find_all('tr');
+		for row in summaryTableRows:
+			if 'Release' in row.text:
+				dateRow = summaryTable.find('span',{ 'class' : 'bday dtstart published updated'});
+				releaseDate = dateRow.text;
+				releaseDate = releaseDate.strip();
+				releaseDate = releaseDate.replace('\n','');
+
+	except AttributeError:
+		releaseDate = ("null");
+
+	return releaseDate;
+
 def list_to_column_value(notableData):
 	pipesAndTuples = "";
 	
