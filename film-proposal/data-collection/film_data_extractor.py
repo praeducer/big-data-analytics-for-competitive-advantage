@@ -8,6 +8,7 @@ import sys
 import re
 from bs4 import BeautifulSoup
 import wikipedia
+import csv
 
 wikipediaRoot = 'http://en.wikipedia.org';
 
@@ -63,22 +64,34 @@ def actor_extractor(filmPageSoup):
 
 	return actorData;
 
+def list_to_column_value(notableData):
+	pipesAndTuples = "";
+	
+	for notableTuple in notableData:
+		notableName = notableTuple['name'];
+		notableURL = notableTuple['url'];
+		pipesAndTuples += notableName + ':' + notableURL + '|';
+	# Removing last pipe
+	return pipesAndTuples[:-1];
 
 if __name__=="__main__":
 
+	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
 	relativeFilmFilePath = './data/films/test/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
 		print('-----------');
-		print(filmFileName);
-		filmPage = open(relativeFilmFilePath + filmFileName);
+		fullFilmFilePath = relativeFilmFilePath + filmFileName;
+		filmPage = open(fullFilmFilePath);
 		filmPageSoup = BeautifulSoup(filmPage.read());
+
+		filmURLName = os.path.splitext(filmFileName)[0];
+		filmURL = 'http://en.wikipedia.org/wiki/' + filmURLName;
+		print(filmFileName);
 		directorData = director_extractor(filmPageSoup);
+		directorValue = list_to_column_value(directorData);
 		actorData = actor_extractor(filmPageSoup);
-		for directorTuple in directorData:
-			print('Director:');
-			print(directorTuple);
-		for actorTuple in actorData:
-			print('Actor:');
-			print(actorTuple);
+		actorValue = list_to_column_value(actorData);
+
+		filmWriter.writerow([filmURL, directorValue, actorValue]);
 
