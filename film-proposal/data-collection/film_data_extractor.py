@@ -136,11 +136,10 @@ if __name__=="__main__":
 
 	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
 	filmIndex = build_film_index();
-	filmWriter.writerow(['title', 'url', 'year', 'director', 'actor', 'distributor']);
+	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'director', 'actor', 'distributor']);
 	relativeFilmFilePath = './data/films/test/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
-		print('-----------');
 		print(filmFileName);
 		fullFilmFilePath = relativeFilmFilePath + filmFileName;
 		try:
@@ -151,6 +150,7 @@ if __name__=="__main__":
 
 		filmURLName = os.path.splitext(filmFileName)[0];
 		filmURL = 'http://en.wikipedia.org/wiki/' + filmURLName;
+		releaseDate = release_date_extractor(filmPageSoup);
 		directorData = director_extractor(filmPageSoup);
 		directorValue = list_to_column_value(directorData);
 		actorData = actor_extractor(filmPageSoup);
@@ -159,6 +159,6 @@ if __name__=="__main__":
 		distributionValue = list_to_column_value(distributionData);
 
 		try:
-			filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, filmIndex[filmURL]['year'], directorValue, actorValue, distributionValue]);
+			filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, releaseDate, filmIndex[filmURL]['year'], directorValue, actorValue, distributionValue]);
 		except KeyError:
 			pass;
