@@ -96,7 +96,7 @@ def distribution_company_extractor(filmPageSoup):
 # TODO: Still need to handle films that list multiple dates, commonly for different countries
 def release_date_extractor(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
-
+	releaseDate = "";
 	try:
 		summaryTableRows = summaryTable.find_all('tr');
 		for row in summaryTableRows:
@@ -150,15 +150,38 @@ if __name__=="__main__":
 
 		filmURLName = os.path.splitext(filmFileName)[0];
 		filmURL = 'http://en.wikipedia.org/wiki/' + filmURLName;
-		releaseDate = release_date_extractor(filmPageSoup);
+		
+		filmDate = release_date_extractor(filmPageSoup);
+		if not filmDate:
+			filmDate = 'null';
+		
 		directorData = director_extractor(filmPageSoup);
 		directorValue = list_to_column_value(directorData);
+		if not directorValue:
+			directorValue = 'null';
+
 		actorData = actor_extractor(filmPageSoup);
 		actorValue = list_to_column_value(actorData);
+		if not actorValue:
+			actorValue = 'null';		
+
 		distributionData = distribution_company_extractor(filmPageSoup);
 		distributionValue = list_to_column_value(distributionData);
+		if not distributionValue:
+			distributionValue = 'null';
 
 		try:
-			filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, releaseDate, filmIndex[filmURL]['year'], directorValue, actorValue, distributionValue]);
+			filmData = filmIndex.get(filmURL);
+			if filmData:
+				filmTitle = filmData.get('title');
+				if not filmTitle:
+					filmTitle = 'null';
+				filmYear = filmData.get('year');
+				if not filmYear:
+					filmYear = 'null';
+			else:
+				filmTitle = 'null';
+				filmYear = 'null';
+			filmWriter.writerow([filmTitle, filmURL, filmDate, filmYear, directorValue, actorValue, distributionValue]);
 		except KeyError:
 			pass;
