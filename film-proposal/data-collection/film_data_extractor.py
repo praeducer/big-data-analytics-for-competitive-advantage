@@ -70,13 +70,26 @@ def list_to_column_value(notableData):
 	for notableTuple in notableData:
 		notableName = notableTuple['name'];
 		notableURL = notableTuple['url'];
-		pipesAndTuples += notableName + ':' + notableURL + '|';
+		pipesAndTuples += notableName + ';' + notableURL + '|';
 	# Removing last pipe
 	return pipesAndTuples[:-1];
+
+def build_film_index():
+	filmIndex = {};
+	filmDataFilename = './data/film_urls.csv';
+	filmDataReader = csv.reader(open(filmDataFilename));
+	filmDataReader.__next__();
+	count = 0;
+	for filmData in filmDataReader:
+		count += 1;
+		filmIndex[filmData[0]] = {'title': filmData[1], 'year': filmData[2]};
+	return filmIndex;
 
 if __name__=="__main__":
 
 	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
+	filmIndex = build_film_index();
+	filmWriter.writerow(['title', 'url', 'year', 'director', 'actor']);
 	relativeFilmFilePath = './data/films/test/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
@@ -93,5 +106,5 @@ if __name__=="__main__":
 		actorData = actor_extractor(filmPageSoup);
 		actorValue = list_to_column_value(actorData);
 
-		filmWriter.writerow([filmURL, directorValue, actorValue]);
+		filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, filmIndex[filmURL]['year'], directorValue, actorValue]);
 
