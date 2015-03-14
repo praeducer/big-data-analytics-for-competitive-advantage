@@ -200,7 +200,7 @@ def release_date_extractor(filmPageSoup):
 	return releaseDate;
 
 def genre_extractor(filmPageSoup):
-
+	genreList = [];
 	# Main list of film Genres scrubbed programatically from Wikipedia, supplemented by list found at http://www.imdb.com/genre/
 	filmGenres = [
 		'Romance',
@@ -241,23 +241,24 @@ def genre_extractor(filmPageSoup):
 	]
 
 	filmParagraphs = filmPageSoup.find_all('p');
-	targetParagraph = filmParagraphs[0];
-	paragraphText = targetParagraph.text.lower();
-	paragraphText = paragraphText.replace('-',' ');
-	wordList = paragraphText.split('.');
-	targetSentance = wordList[0];
-	targetWords = targetSentance.split(' ');
+	if filmParagraphs:
+		targetParagraph = filmParagraphs[0];
+		paragraphText = targetParagraph.text.lower();
+		paragraphText = paragraphText.replace('-',' ');
+		wordList = paragraphText.split('.');
+		targetSentance = wordList[0];
+		targetWords = targetSentance.split(' ');
 
-	genreList = [];
-
-	try:
-		for word in targetWords:
-			for genre in filmGenres:
-				genre = genre.lower();
-				if word == genre:
-					genreList.append(word);
-	except IndexError:
-		genreList.append("null");
+		try:
+			for word in targetWords:
+				for genre in filmGenres:
+					genre = genre.lower();
+					if word == genre:
+						genreList.append(word);
+		except IndexError:
+			genreList.append("null");
+	else:
+			genreList.append("null");
 
 	return genreList;
 
@@ -292,7 +293,7 @@ if __name__=="__main__":
 	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
 	filmIndex = build_film_index();
 	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre']);
-	relativeFilmFilePath = './data/films/test/';
+	relativeFilmFilePath = './data/films/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
 		print(filmFileName);
