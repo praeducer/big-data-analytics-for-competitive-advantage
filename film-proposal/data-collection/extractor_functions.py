@@ -135,7 +135,7 @@ def budget_extractor(filmPageSoup):
 						else:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
 							budgetData.append(filmBudget);
-	except AttributeError:
+	except (AttributeError, IndexError):
 		budgetData.append("null");
 
 	return budgetData;
@@ -159,7 +159,7 @@ def revenue_extractor(filmPageSoup):
 				if poundFind == -1:
 					filmRevenue = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
 					revenueData.append(filmRevenue);
-	except AttributeError:
+	except (AttributeError,IndexError):
 		revenueData.append("null");
 
 	return revenueData;
@@ -175,13 +175,34 @@ def release_date_extractor(filmPageSoup):
 				releaseDate = dateRow.text;
 				releaseDate = releaseDate.strip();
 				releaseDate = releaseDate.replace('\n','');
-
-	except AttributeError:
+				return releaseDate;
+	except (AttributeError,IndexError):
 		releaseDate = ("null");
-
+		return releaseDate;
 #Still need to handle films that list multiple dates, commonly for different countries
 
-	return releaseDate;
+def genre_extractor(filmPageSoup):
+
+	filmParagraphs = filmPageSoup.find_all('p');
+	targetParagraph = filmParagraphs[0];
+	paragraphText = targetParagraph.text.lower();
+	paragraphText = paragraphText.replace('-',' ');
+	wordList = paragraphText.split('.');
+	targetSentance = wordList[0];
+	targetWords = targetSentance.split(' ');
+
+	genreList = [];
+
+	try:
+		for word in targetWords:
+			for genre in filmGenres:
+				genre = genre.lower();
+				if word == genre:
+					genreList.append(word);
+	except IndexError:
+		genreList.append("null");
+
+	return genreList;
 
 """
 URL's with Errors, fix later!
@@ -194,39 +215,91 @@ Revenue function errors:
 """
 
 filmURLs = [
-'http://en.wikipedia.org/wiki/Talladega_Nights:_The_Ballad_of_Ricky_Bobby',
-'http://en.wikipedia.org/wiki/Gokulamlo_Seetha',
-'http://en.wikipedia.org/wiki/Grain_in_Ear',
-'http://en.wikipedia.org/wiki/Scarlet_Sails_(film)',
-'http://en.wikipedia.org/wiki/A_Question_of_Taste',
-'http://en.wikipedia.org/wiki/Uniform_(film)',
-'http://en.wikipedia.org/wiki/City_Slickers',
-'http://en.wikipedia.org/wiki/Die_Sehnsucht_der_Veronika_Voss',
-'http://en.wikipedia.org/wiki/Lenny_(film)',
-'http://en.wikipedia.org/wiki/The_White_Sheik',
-'http://en.wikipedia.org/wiki/Doom_(film)',
-'http://en.wikipedia.org/wiki/It_Happened_in_Brooklyn',
-'http://en.wikipedia.org/wiki/Dead_or_Alive_(film)',
-'http://en.wikipedia.org/wiki/Batman:_New_Times',
-'http://en.wikipedia.org/wiki/Quel_maledetto_treno_blindato',
-'http://en.wikipedia.org/wiki/Teenage_Mutant_Ninja_Turtles_III',
-'http://en.wikipedia.org/wiki/Desert_Fury',
-'http://en.wikipedia.org/wiki/Farewell_My_Lovely_(1975_film)',
-'http://en.wikipedia.org/wiki/Light_Sleeper',
-'http://en.wikipedia.org/wiki/The_Awakening_(2011_film)',
-'http://en.wikipedia.org/wiki/Duck_and_Cover_(film)',
-'http://en.wikipedia.org/wiki/I_Wanna_Hold_Your_Hand_(film)',
-'http://en.wikipedia.org/wiki/Legend_(1985_film)',
-'http://en.wikipedia.org/wiki/Enchanted_(film)',
-'http://en.wikipedia.org/wiki/Clean_and_Sober',
-'http://en.wikipedia.org/wiki/A_Summer_Place_(film)',
-'http://en.wikipedia.org/wiki/Whoopee!_(film)',
-'http://en.wikipedia.org/wiki/I_Eat_Your_Skin'
+'http://en.wikipedia.org/wiki/Wish_You_Were_Here_(1987_film)',
+'http://en.wikipedia.org/wiki/The_Groomsmen',
+'http://en.wikipedia.org/wiki/10_to_Midnight',
+'http://en.wikipedia.org/wiki/Jason%27s_Lyric',
+'http://en.wikipedia.org/wiki/The_Secret_of_the_Grain',
+'http://en.wikipedia.org/wiki/Second_in_Command',
+'http://en.wikipedia.org/wiki/Big_Jim_McLain',
+'http://en.wikipedia.org/wiki/What_Have_I_Done_to_Deserve_This%3F_(film)',
+'http://en.wikipedia.org/wiki/Queen_Christina_(film)',
+'http://en.wikipedia.org/wiki/Alexander%27s_Ragtime_Band_(film)',
+'http://en.wikipedia.org/wiki/Aaru_(film)',
+'http://en.wikipedia.org/wiki/Jinxed!',
+'http://en.wikipedia.org/wiki/The_Thirteenth_Warrior',
+'http://en.wikipedia.org/wiki/Rosemary%27s_Baby_(film)',
+'http://en.wikipedia.org/wiki/Dave_Chappelle%27s_Block_Party',
+'http://en.wikipedia.org/wiki/Give_Seven_Days',
+'http://en.wikipedia.org/wiki/State_and_Main',
+'http://en.wikipedia.org/wiki/Bitter_Love',
+'http://en.wikipedia.org/wiki/P2_(film)',
+'http://en.wikipedia.org/wiki/Fatty_Finn_(film)',
+'http://en.wikipedia.org/wiki/Ghosts_Can%27t_Do_It',
+'http://en.wikipedia.org/wiki/Genova_(1953_film)',
+'http://en.wikipedia.org/wiki/The_Spirit_of_St._Louis_(film)',
+'http://en.wikipedia.org/wiki/Crash_Landing_(1999_film)',
+'http://en.wikipedia.org/wiki/Godzilla_vs._Megaguirus',
+'http://en.wikipedia.org/wiki/Bellyful',
+'http://en.wikipedia.org/wiki/The_Recruit',
+'http://en.wikipedia.org/wiki/Gone_with_the_Wind_(film)',
+'http://en.wikipedia.org/wiki/Lady_in_a_Cage',
+'http://en.wikipedia.org/wiki/Orca_(film)',
+'http://en.wikipedia.org/wiki/Girlfriend_From_Hell',
+'http://en.wikipedia.org/wiki/Mickey_(2004_film)',
+'http://en.wikipedia.org/wiki/Pleasure_Factory',
+'http://en.wikipedia.org/w/index.php?title=The_Wedding_Weekend&action=edit&redlink=1',
+'http://en.wikipedia.org/wiki/Aragami',
+'http://en.wikipedia.org/wiki/Hav_Plenty',
+'http://en.wikipedia.org/wiki/They_Live_by_Night',
+'http://en.wikipedia.org/wiki/The_Relic_(film)',
+'http://en.wikipedia.org/wiki/Forever_the_Moment',
+'http://en.wikipedia.org/wiki/The_Mayor_of_Hell'
 
 ]
 
-for filmURL in filmURLs:
+#Main list of film Genres scrubbed programatically from Wikipedia, supplemented by list found at http://www.imdb.com/genre/
 
+filmGenres = [
+'Romance',
+'Short',
+'Action',
+'Comedy',
+'Drama',
+'Horror',
+'Mystery',
+'Science Fiction',
+'Silent',
+'Crime',
+'Fantasy',
+'Caper',
+'Slasher',
+'Teen',
+'Biographical',
+'Independent',
+'Animated',
+'Erotic',
+'Documentary',
+'War',
+'Thriller',
+'Musical',
+'Heist',
+'Exploitation',
+'Romantic Comedy',
+'Epic',
+'Sports',
+'Parody',
+'Cult',
+'Spy',
+'Concert',
+'Vampires',
+'Children',
+'Adventure',
+'Sci-fi'
+]
+
+for filmURL in filmURLs:
+	
 	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
 	directorData = director_extractor(filmPageSoup);
 	budgetData = budget_extractor(filmPageSoup);
@@ -234,5 +307,13 @@ for filmURL in filmURLs:
 	actorData = actor_extractor(filmPageSoup);
 	revenueData = revenue_extractor(filmPageSoup);
 	releaseDate = release_date_extractor(filmPageSoup);
-	print('Release Date: ');
-	print(releaseDate);
+	genreList = genre_extractor(filmPageSoup);
+
+#	for directorTuple in directorData:
+#		print("Director: ");
+#		print(directorTuple);
+	for genre in genreList:
+		print("Genre: ");
+		print(genre);
+#	print('Release Date: ');
+#	print(releaseDate);
