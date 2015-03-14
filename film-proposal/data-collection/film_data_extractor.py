@@ -36,7 +36,7 @@ def director_extractor(filmPageSoup):
 							directorTuple = {'name': directorName, 'url': directorURL};
 							directorData.append(directorTuple);
 	except AttributeError:
-		directorTuple = {'name': "null", 'url': "null"};
+		directorTuple = {'name': 'null', 'url': 'null'};
 		directorData.append(directorTuple);
 
 	return directorData;
@@ -58,7 +58,7 @@ def actor_extractor(filmPageSoup):
 						actorTuple = {'name': actorName, 'url': actorURL};
 						actorData.append(actorTuple);
 	except AttributeError:
-		actorTuple = {'name': actorName, 'url': actorURL};
+		actorTuple = {'name': 'null', 'url': 'null'};
 		actorData.append(actorTuple);
 
 	return actorData;
