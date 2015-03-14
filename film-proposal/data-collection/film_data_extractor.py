@@ -12,6 +12,95 @@ import csv
 
 wikipediaRoot = 'http://en.wikipedia.org';
 
+def budget_extractor(filmPageSoup):
+	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+
+	try:
+		summaryTableRows = summaryTable.find_all('tr');
+
+		for row in summaryTableRows:
+			if 'Budget' in row.text:
+				filmBudget = row.text;
+				filmBudget = filmBudget.strip();
+				filmBudget = filmBudget.replace('\n','');
+				decimalFind = filmBudget.find('.');
+				poundFind = filmBudget.find('£');
+				if poundFind == -1:
+					if decimalFind == -1:
+						if 'million' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace(' ','').strip();
+							filmBudget = filmBudget + ',000,000';
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
+						elif 'thousand' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
+							filmBudget = filmBudget + ',000';
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
+						else:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
+					else:
+						if 'million' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace('.',',').strip();
+							filmBudget = filmBudget + '00,000';
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
+						elif 'thousand' in filmBudget:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').replace('.',',').strip();
+							filmBudget = filmBudget + '00';
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
+						else:
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
+	except (AttributeError, IndexError):
+		filmBudget = "null";
+		return filmBudget;
+
+
+def revenue_extractor(filmPageSoup):
+	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+
+	revenueData = [];
+
+	try:
+		summaryTableRows = summaryTable.find_all('tr');
+
+		for row in summaryTableRows:
+			if 'Box' in row.text:
+				filmRevenue = row.text;
+				filmRevenue = filmRevenue.strip();
+				filmRevenue = filmRevenue.replace('\n','');
+				poundFind = filmRevenue.find('£');
+				#purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
+				if poundFind == -1:
+					filmRevenue = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
+					revenueData.append(filmRevenue);
+	except (AttributeError,IndexError):
+		revenueData.append("null");
+
+	return revenueData;
 
 def director_extractor(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});	
