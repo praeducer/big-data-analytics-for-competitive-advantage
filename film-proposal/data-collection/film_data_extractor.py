@@ -90,21 +90,26 @@ if __name__=="__main__":
 	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
 	filmIndex = build_film_index();
 	filmWriter.writerow(['title', 'url', 'year', 'director', 'actor']);
-	relativeFilmFilePath = './data/films/test/';
+	relativeFilmFilePath = './data/films/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
 		print('-----------');
+		print(filmFileName);
 		fullFilmFilePath = relativeFilmFilePath + filmFileName;
-		filmPage = open(fullFilmFilePath);
+		try:
+			filmPage = open(fullFilmFilePath);
+		except IsADirectoryError:
+			pass;
 		filmPageSoup = BeautifulSoup(filmPage.read());
 
 		filmURLName = os.path.splitext(filmFileName)[0];
 		filmURL = 'http://en.wikipedia.org/wiki/' + filmURLName;
-		print(filmFileName);
 		directorData = director_extractor(filmPageSoup);
 		directorValue = list_to_column_value(directorData);
 		actorData = actor_extractor(filmPageSoup);
 		actorValue = list_to_column_value(actorData);
 
-		filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, filmIndex[filmURL]['year'], directorValue, actorValue]);
-
+		try:
+			filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, filmIndex[filmURL]['year'], directorValue, actorValue]);
+		except KeyError:
+			pass;
