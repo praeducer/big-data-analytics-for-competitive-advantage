@@ -111,6 +111,68 @@ def release_date_extractor(filmPageSoup):
 
 	return releaseDate;
 
+def genre_extractor(filmPageSoup):
+
+	# Main list of film Genres scrubbed programatically from Wikipedia, supplemented by list found at http://www.imdb.com/genre/
+	filmGenres = [
+		'Romance',
+		'Short',
+		'Action',
+		'Comedy',
+		'Drama',
+		'Horror',
+		'Mystery',
+		'Science Fiction',
+		'Silent',
+		'Crime',
+		'Fantasy',
+		'Caper',
+		'Slasher',
+		'Teen',
+		'Biographical',
+		'Independent',
+		'Animated',
+		'Erotic',
+		'Documentary',
+		'War',
+		'Thriller',
+		'Musical',
+		'Heist',
+		'Exploitation',
+		'Romantic Comedy',
+		'Epic',
+		'Sports',
+		'Parody',
+		'Cult',
+		'Spy',
+		'Concert',
+		'Vampires',
+		'Children',
+		'Adventure',
+		'Sci-fi'
+	]
+
+	filmParagraphs = filmPageSoup.find_all('p');
+	targetParagraph = filmParagraphs[0];
+	paragraphText = targetParagraph.text.lower();
+	paragraphText = paragraphText.replace('-',' ');
+	wordList = paragraphText.split('.');
+	targetSentance = wordList[0];
+	targetWords = targetSentance.split(' ');
+
+	genreList = [];
+
+	try:
+		for word in targetWords:
+			for genre in filmGenres:
+				genre = genre.lower();
+				if word == genre:
+					genreList.append(word);
+	except IndexError:
+		genreList.append("null");
+
+	return genreList;
+
 def list_to_column_value(notableData):
 	pipesAndTuples = "";
 	
