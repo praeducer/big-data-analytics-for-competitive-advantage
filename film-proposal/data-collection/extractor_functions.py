@@ -98,8 +98,6 @@ def distribution_company_extractor(filmPageSoup):
 def budget_extractor(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 
-	budgetData = [];
-
 	try:
 		summaryTableRows = summaryTable.find_all('tr');
 
@@ -113,32 +111,55 @@ def budget_extractor(filmPageSoup):
 				if poundFind == -1:
 					if decimalFind == -1:
 						if 'million' in filmBudget:
-							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').strip();
+							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace(' ','').strip();
 							filmBudget = filmBudget + ',000,000';
-							budgetData.append(filmBudget);
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
 						elif 'thousand' in filmBudget:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
 							filmBudget = filmBudget + ',000';
-							budgetData.append(filmBudget);
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
 						else:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
-							budgetData.append(filmBudget);
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
 					else:
 						if 'million' in filmBudget:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace('.',',').strip();
 							filmBudget = filmBudget + '00,000';
-							budgetData.append(filmBudget);
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
 						elif 'thousand' in filmBudget:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').replace('.',',').strip();
 							filmBudget = filmBudget + '00';
-							budgetData.append(filmBudget);
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
 						else:
 							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
-							budgetData.append(filmBudget);
+							openingIndex = filmBudget.find('(');
+							closingIndex = filmBudget.find(')');
+							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
+							filmBudget = filmBudget.replace(' ','').replace(')','');
+							return filmBudget;
 	except (AttributeError, IndexError):
-		budgetData.append("null");
-
-	return budgetData;
+		filmBudget = "null";
+		return filmBudget;
 
 
 def revenue_extractor(filmPageSoup):
@@ -230,31 +251,7 @@ filmURLs = [
 'http://en.wikipedia.org/wiki/The_Thirteenth_Warrior',
 'http://en.wikipedia.org/wiki/Rosemary%27s_Baby_(film)',
 'http://en.wikipedia.org/wiki/Dave_Chappelle%27s_Block_Party',
-'http://en.wikipedia.org/wiki/Give_Seven_Days',
-'http://en.wikipedia.org/wiki/State_and_Main',
-'http://en.wikipedia.org/wiki/Bitter_Love',
-'http://en.wikipedia.org/wiki/P2_(film)',
-'http://en.wikipedia.org/wiki/Fatty_Finn_(film)',
-'http://en.wikipedia.org/wiki/Ghosts_Can%27t_Do_It',
-'http://en.wikipedia.org/wiki/Genova_(1953_film)',
-'http://en.wikipedia.org/wiki/The_Spirit_of_St._Louis_(film)',
-'http://en.wikipedia.org/wiki/Crash_Landing_(1999_film)',
-'http://en.wikipedia.org/wiki/Godzilla_vs._Megaguirus',
-'http://en.wikipedia.org/wiki/Bellyful',
-'http://en.wikipedia.org/wiki/The_Recruit',
-'http://en.wikipedia.org/wiki/Gone_with_the_Wind_(film)',
-'http://en.wikipedia.org/wiki/Lady_in_a_Cage',
-'http://en.wikipedia.org/wiki/Orca_(film)',
-'http://en.wikipedia.org/wiki/Girlfriend_From_Hell',
-'http://en.wikipedia.org/wiki/Mickey_(2004_film)',
-'http://en.wikipedia.org/wiki/Pleasure_Factory',
-'http://en.wikipedia.org/w/index.php?title=The_Wedding_Weekend&action=edit&redlink=1',
-'http://en.wikipedia.org/wiki/Aragami',
-'http://en.wikipedia.org/wiki/Hav_Plenty',
-'http://en.wikipedia.org/wiki/They_Live_by_Night',
-'http://en.wikipedia.org/wiki/The_Relic_(film)',
-'http://en.wikipedia.org/wiki/Forever_the_Moment',
-'http://en.wikipedia.org/wiki/The_Mayor_of_Hell'
+'http://en.wikipedia.org/wiki/Give_Seven_Days'
 
 ]
 
@@ -302,18 +299,17 @@ for filmURL in filmURLs:
 	
 	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
 	directorData = director_extractor(filmPageSoup);
-	budgetData = budget_extractor(filmPageSoup);
+	filmBudget = budget_extractor(filmPageSoup);
 	distributionCompanyData = distribution_company_extractor(filmPageSoup);
 	actorData = actor_extractor(filmPageSoup);
 	revenueData = revenue_extractor(filmPageSoup);
 	releaseDate = release_date_extractor(filmPageSoup);
 	genreList = genre_extractor(filmPageSoup);
 
+	print(filmBudget);
 #	for directorTuple in directorData:
 #		print("Director: ");
 #		print(directorTuple);
-	for genre in genreList:
-		print("Genre: ");
-		print(genre);
+
 #	print('Release Date: ');
 #	print(releaseDate);
