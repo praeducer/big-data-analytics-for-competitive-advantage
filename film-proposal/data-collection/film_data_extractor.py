@@ -88,7 +88,7 @@ def distribution_company_extractor(filmPageSoup):
 							companyTuple = {'name': companyName, 'url': companyURL};
 							distributionCompanyData.append(companyTuple);
 	except AttributeError:
-		companyTuple = {'name': companyName, 'url': companyURL};
+		companyTuple = {'name': 'null', 'url': 'null'};
 		distributionCompanyData.append(companyTuple);
 
 	return distributionCompanyData;
@@ -118,8 +118,8 @@ if __name__=="__main__":
 
 	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
 	filmIndex = build_film_index();
-	filmWriter.writerow(['title', 'url', 'year', 'director', 'actor']);
-	relativeFilmFilePath = './data/films/';
+	filmWriter.writerow(['title', 'url', 'year', 'director', 'actor', 'distributor']);
+	relativeFilmFilePath = './data/films/test/';
 	filmFiles = os.listdir(relativeFilmFilePath);
 	for filmFileName in filmFiles:
 		print('-----------');
@@ -137,8 +137,10 @@ if __name__=="__main__":
 		directorValue = list_to_column_value(directorData);
 		actorData = actor_extractor(filmPageSoup);
 		actorValue = list_to_column_value(actorData);
+		distributionData = distribution_company_extractor(filmPageSoup);
+		distributionValue = list_to_column_value(distributionData);
 
 		try:
-			filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, filmIndex[filmURL]['year'], directorValue, actorValue]);
+			filmWriter.writerow([filmIndex[filmURL]['title'], filmURL, filmIndex[filmURL]['year'], directorValue, actorValue, distributionValue]);
 		except KeyError:
 			pass;
