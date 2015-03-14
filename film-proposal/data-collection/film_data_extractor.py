@@ -64,6 +64,35 @@ def actor_extractor(filmPageSoup):
 
 	return actorData;
 
+def distribution_company_extractor(filmPageSoup):
+	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});	
+	distributionCompanyData = [];
+
+	try:
+		summaryTableRows = summaryTable.find_all('tr');
+
+		for row in summaryTableRows:
+			if 'Distributed' in row.text:
+				companyNameATags = row.find_all('a');
+				if not companyNameATags:
+					companyName = row.text.replace(',','').replace('\'','').replace('"','');
+					companyName = companyName.replace('\n','').replace('Distributed by','');
+					companyURL = 'null';
+					companyTuple = {'name': companyName, 'url': companyURL};
+					distributionCompanyData.append(companyTuple);
+				else:
+					for tag in companyNameATags:
+						if tag['href'][0] == "/":			
+							companyName = tag['title'].replace(',','').replace('\'','').replace('"','');
+							companyURL = wikipediaRoot + tag['href'].replace(',','').replace('\'','').replace('"','');
+							companyTuple = {'name': companyName, 'url': companyURL};
+							distributionCompanyData.append(companyTuple);
+	except AttributeError:
+		companyTuple = {'name': companyName, 'url': companyURL};
+		distributionCompanyData.append(companyTuple);
+
+	return distributionCompanyData;
+
 def list_to_column_value(notableData):
 	pipesAndTuples = "";
 	
