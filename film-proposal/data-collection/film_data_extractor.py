@@ -13,23 +13,31 @@ wikipediaRoot = 'http://en.wikipedia.org';
 
 
 def director_extractor(filmPageSoup):
-
-	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
+	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});	
 	directorData = [];
 
 	try:
 		summaryTableRows = summaryTable.find_all('tr');
+
 		for row in summaryTableRows:
 			if 'Directed' in row.text:
 				directorNameATags = row.find_all('a');
-				for tag in directorNameATags:
-					if tag['href'][0] == "/":			
-						directorName = tag['title'].replace(',','').replace('\'','').replace('"','');
-						directorURL = wikipediaRoot + tag['href'].replace(',','').replace('\'','').replace('"','');
-						directorTuple = {'name': directorName, 'url': directorURL};
-						directorData.append(directorTuple);
+				if not directorNameATags:
+					directorName = row.text.replace(',','').replace('\'','').replace('"','').replace('\u014d','o');
+					directorName = directorName.replace('\n','').replace('Directed by','');
+					directorURL = 'null'
+					directorTuple = {'name': directorName, 'url': directorURL};
+					directorData.append(directorTuple);
+				else:
+					for tag in directorNameATags:
+						if tag['href'][0] == "/":			
+							directorName = tag['title'].replace(',','').replace('\'','').replace('"','').replace('\u014d','o');
+							directorURL = wikipediaRoot + tag['href'].replace(',','').replace('\'','').replace('"','');
+							directorTuple = {'name': directorName, 'url': directorURL};
+							directorData.append(directorTuple);
 	except AttributeError:
-		directorData.append("null");
+		directorTuple = {'name': "null", 'url': "null"};
+		directorData.append(directorTuple);
 
 	return directorData;
 
@@ -50,7 +58,8 @@ def actor_extractor(filmPageSoup):
 						actorTuple = {'name': actorName, 'url': actorURL};
 						actorData.append(actorTuple);
 	except AttributeError:
-		actorData.append("null");
+		actorTuple = {'name': actorName, 'url': actorURL};
+		actorData.append(actorTuple);
 
 	return actorData;
 
