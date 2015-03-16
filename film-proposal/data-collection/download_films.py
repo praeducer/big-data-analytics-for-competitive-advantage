@@ -1,3 +1,9 @@
+# description: This script stores the HTML from a web page locally given a list of URLs of each page to download.
+# output: .csv
+# author: Paul Prae
+# since: 3/8/2015
+# tested with Python 3.3 on CentOS 7
+
 import sys
 import csv
 import requests
