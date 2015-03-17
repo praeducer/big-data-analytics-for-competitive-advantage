@@ -53,13 +53,6 @@ def parseITag(iTag):
 	if not filmYear and len(iTagParentContents) > 2:
 		filmYear = iTagParentContents[2].contents[0];
 		filmYear = ''.join(filter(lambda char: char.isdigit(), filmYear));
-#	elif not filmYear:
-#		iTagSibling = listOfFilmsITag.next_sibling
-#		print(filmTitle);
-#		if iTagSibling:
-#			filmYear = iTagSibling.contents[0];
-#			filmYear = ''.join(filter(lambda char: char.isdigit(), filmYear));
-#			print(filmYear);
 	if not filmYear:
 		filmYear = 'null';
 	filmURL = wikipediaRoot + listOfFilmsITag.a.get('href');
