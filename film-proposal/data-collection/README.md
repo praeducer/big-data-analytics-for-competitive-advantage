@@ -1,5 +1,5 @@
 ## readme
-This section describes the core source files that are necessary for collecting the data we need to analyze. It will list the scripts in the order they should be ran, since the output of a script may be necessary for the input of the next. Each section will contain a description of the script, how to run the script, the input requirements, and what to expect for output. We will start by listing the project's dependencies. 
+This file describes the core source files that are necessary for collecting the data we need to analyze. It will list the scripts in the order they should be ran, since the output of a script may be necessary for the input of the next. Each section will contain a description of the script, how to run the script, the input requirements, and what to expect for output. We will start by listing the project's dependencies. 
 
 ### Environment Configuration
 #### Python Libraries
