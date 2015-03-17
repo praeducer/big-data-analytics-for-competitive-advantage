@@ -32,7 +32,6 @@ You do not need to provide any input via the command line. Since this file is cu
 ###### Output
 It will write a .csv file to './data/film_urls.csv' with the columns 'url,title,year'. e.g.
 
-`
 
 url,title,year
 
@@ -46,7 +45,6 @@ http://en.wikipedia.org/wiki/All_or_Nothing_(film),'All or Nothing (film)',2002
 
 http://en.wikipedia.org/wiki/Malli_(film),'Malli (film)',1998
 
-`
 
 ### Step Two: Download the Films
 ##### download_films.py
