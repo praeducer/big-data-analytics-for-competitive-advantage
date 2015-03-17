@@ -1,4 +1,4 @@
-# description: This script stores the HTML from a web page locally given a list of URLs of each page to download.
+# description: Given a list of URLs for pages to download, this script stores the HTML from these pages locally.
 # output: .csv
 # author: Paul Prae
 # since: 3/8/2015
