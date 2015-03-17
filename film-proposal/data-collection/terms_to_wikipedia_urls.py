@@ -1,7 +1,7 @@
 # description: takes in a list of search terms and outputs a list of wikipedia URLs. Currently focuses on films.
 # input: must pass in a new line separated input file as a command line argument.
-# file output: .csv
-# cmd line output: https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/film-proposal/data-collection/data/cmd_output.txt
+# file output: a .csv e.g. https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/film-proposal/data-collection/data/wikipedia_urls.csv
+# cmd line output: e.g. https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/film-proposal/data-collection/data/cmd_output.txt
 # author: Paul Prae
 # since: 3/3/2015
 # tested with Python 3.3 on CentOS 7
