@@ -61,7 +61,7 @@ For each URL provided, there will be a 'page-name.html' file stored in './data/f
 This is the script that does the primary data extraction. This script will parse all of the HTML files stored in './data/films/'.
 
 ###### Input
-This film will process every file located in './data/films/'. It grabs every file in the given directory and processes it when possible.
+This script will process every file located in './data/films/'. It grabs every file in the given directory and processes it when possible.
 
 ###### Output
 It will create a .csv file where each row represents a film. Each row will have the following columns:
