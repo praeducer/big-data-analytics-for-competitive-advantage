@@ -17,7 +17,7 @@ We also used some more general use libraries such as 'sys', 'os', 'fileinput', '
 All scripts should be ran from the same location. This location should have a directory created called 'data' where some of the output will be stored.
 
 ### General Notes
-+ Unless otherwise noted, all scripts can be ran by typing 'python <name-of-file.py>'.
++ Unless otherwise noted, all scripts can be ran by typing 'python name-of-file.py'.
 + Some scripts will require an input file. Unless noted below, assume input is hard coded.
 + Output will typically be placed where the scripts is ran or into a './data/' directory. Please create this directory ahead of time.
 + Some scripts will also output the state of the script to the terminal but this is for logging only.
@@ -48,7 +48,7 @@ This script stores the HTML from a web page locally given a list of URLs of each
 This script simply takes the output file from 'film_url_extractor.py' and downloads the content from every URL in the first column. This technically could work on an arbitrary new line separated list of URLs.
 
 ###### Output
-For each URL provided, there will be a '<page-name>.html' file stored in './data/films/'. This file will contain the source code found at the given URL.
+For each URL provided, there will be a 'page-name.html' file stored in './data/films/'. This file will contain the source code found at the given URL.
 
 ### Step Three: Parse the Film Files
 ##### film_data_extractor.py
