@@ -39,7 +39,7 @@ def parseAllFilmPages(listOfFilmsURLs):
 				filmDataByURL[filmData['url']] = filmData;
 	return filmDataByURL;
 
-# PullData we need out of the <i> tag in the soup object. return list with url, title, and date.
+# pull data we need out of the <i> tag in the soup object. return list with url, title, and year.
 def parseITag(iTag):
 	listOfFilmsITag = iTag;
 	filmTitle = listOfFilmsITag.a.get('title');
