@@ -1,5 +1,5 @@
-## readme
-This file describes the core source files that are necessary for collecting the data we need to analyze. It will list the scripts in the order they should be ran, since the output of a script may be necessary for the input of the next. Each section will contain a description of the script, how to run the script, the input requirements, and what to expect for output. We will start by listing the project's dependencies. 
+## Readme
+This section describes the core source files that are necessary for collecting the data we need to analyze. It will list the scripts in the order they should be ran, since the output of a script may be necessary for the input of the next. Each section will contain a description of the script, how to run the script, the input requirements, and what to expect for output. We will start by listing the project's dependencies. 
 
 ### Environment Configuration
 #### Python Libraries
@@ -42,10 +42,10 @@ http://en.wikipedia.org/wiki/Malli_(film),'Malli (film)',1998
 
 ### Step Two: Download the Films
 ##### download_films.py
-This script stores the HTML from a web page locally given a list of URLs of each page to download.
+Given a list of URLs for pages to download, this script stores the HTML from these pages locally.
 
 ###### Input
-This script simply takes the output file from 'film_url_extractor.py' and downloads the content from every URL in the first column. This technically could work on an arbitrary new line separated list of URLs.
+This script simply takes the output file, './data/film_urls.csv', from 'film_url_extractor.py' and downloads the content from every URL in the first column. This technically could work on an arbitrary new line separated list of URLs from any source.
 
 ###### Output
 For each URL provided, there will be a 'page-name.html' file stored in './data/films/'. This file will contain the source code found at the given URL.
@@ -55,15 +55,47 @@ For each URL provided, there will be a 'page-name.html' file stored in './data/f
 This is the script that does the primary data extraction. This script will parse all of the HTML files stored in './data/films/'.
 
 ###### Input
-This film will process every file located in './data/films/'. 
+This film will process every file located in './data/films/'. It grabs every file in the given directory and processes it when possible.
+
+###### Output
+It will create a .csv file where each row represents a film. Each row will have the following columns:
+'title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre'. Each of these will typically be the direct output from one of the several extractor functions defined in the file e.g. 'actor_extractor(filmPageSoup)' or 'budget_extractor(filmPageSoup)'.
+
+If column contains a list, it will be pipe, '|', separated. e.g.  'genre':
+
+`
+fantasy|action|comedy
+`
+
+If there are multiple value inside the pipe separated values, they will be separated with a semi-colon. e.g. 'actor':
+
+`
+Jim Carrey;http://en.wikipedia.org/wiki/Jim_Carrey|Peter Riegert;http://en.wikipedia.org/wiki/Peter_Riegert|Peter Greene;http://en.wikipedia.org/wiki/Peter_Greene|Amy Yasbeck;http://en.wikipedia.org/wiki/Amy_Yasbeck|Richard Jeni;http://en.wikipedia.org/wiki/Richard_Jeni|Cameron Diaz;http://en.wikipedia.org/wiki/Cameron_Diaz
+`
+
+Here are a few example rows:
+
+`'Fullmetal Alchemist the Movie: Conqueror of Shamballa',http://en.wikipedia.org/wiki/Fullmetal_Alchemist_the_Movie:_Conqueror_of_Shamballa,2005-07-23,2005,null,null,Seiji Mizushima;http://en.wikipedia.org/wiki/Seiji_Mizushima,Romi Park;http://en.wikipedia.org/wiki/Romi_Park|Rie Kugimiya;http://en.wikipedia.org/wiki/Rie_Kugimiya|Megumi Toyoguchi;http://en.wikipedia.org/wiki/Megumi_Toyoguchi|Tōru Ōkawa;http://en.wikipedia.org/wiki/T%C5%8Dru_%C5%8Ckawa|Kenji Utsumi;http://en.wikipedia.org/wiki/Kenji_Utsumi|Michiko Neya;http://en.wikipedia.org/wiki/Michiko_Neya|Keiji Fujiwara;http://en.wikipedia.org/wiki/Keiji_Fujiwara|Kotono Mitsuishi;http://en.wikipedia.org/wiki/Kotono_Mitsuishi|Masashi Ebara;http://en.wikipedia.org/wiki/Masashi_Ebara|Unshō Ishizuka;http://en.wikipedia.org/wiki/Unsh%C5%8D_Ishizuka|Hidekatsu Shibata;http://en.wikipedia.org/wiki/Hidekatsu_Shibata|Miyoko Asō;http://en.wikipedia.org/wiki/Miyoko_As%C5%8D|Masane Tsukayama;http://en.wikipedia.org/wiki/Masane_Tsukayama|Shun Oguri;http://en.wikipedia.org/wiki/Shun_Oguri|Miyuu Sawai;http://en.wikipedia.org/wiki/Miyuu_Sawai,Shochiku;http://en.wikipedia.org/wiki/Shochiku,animated`
+***
+`'The Mask (film)',http://en.wikipedia.org/wiki/The_Mask_(film),1994-07-29,1994,23000000,3516 million,Chuck Russell;http://en.wikipedia.org/wiki/Chuck_Russell,Jim Carrey;http://en.wikipedia.org/wiki/Jim_Carrey|Peter Riegert;http://en.wikipedia.org/wiki/Peter_Riegert|Peter Greene;http://en.wikipedia.org/wiki/Peter_Greene|Amy Yasbeck;http://en.wikipedia.org/wiki/Amy_Yasbeck|Richard Jeni;http://en.wikipedia.org/wiki/Richard_Jeni|Cameron Diaz;http://en.wikipedia.org/wiki/Cameron_Diaz,New Line Productions;http://en.wikipedia.org/wiki/New_Line_Productions,fantasy|action|comedy`
+***
+`'Clueless (film)',http://en.wikipedia.org/wiki/Clueless_(film),1995-07-19,1995,20000000,56631572,Amy Heckerling;http://en.wikipedia.org/wiki/Amy_Heckerling,Alicia Silverstone;http://en.wikipedia.org/wiki/Alicia_Silverstone|Stacey Dash;http://en.wikipedia.org/wiki/Stacey_Dash|Brittany Murphy;http://en.wikipedia.org/wiki/Brittany_Murphy|Paul Rudd;http://en.wikipedia.org/wiki/Paul_Rudd|Donald Faison;http://en.wikipedia.org/wiki/Donald_Faison|Breckin Meyer;http://en.wikipedia.org/wiki/Breckin_Meyer|Dan Hedaya;http://en.wikipedia.org/wiki/Dan_Hedaya,Paramount Pictures;http://en.wikipedia.org/wiki/Paramount_Pictures,comedy`
 
 ### Collection of Notable Contributors
+#### Notable Actors
+##### actor_extractor.py
+
 
 #### Notable Directors
 ##### director_extractor.py
 
+
 #### Notable Distributors
 ##### producer_extractor.py
 
-#### Notable Actors
-##### actor_extractor.py
+
+### Lessons learned while web mining Wikipedia:
++ The Wikipedia Python API library is not magical. Paul hardly used it at all when pulling notable actors for example. We mostly did standard web mining with Beautiful Soup.
++ Wikipedia pages that are supposed to have the same exact type of content can be formatted completely different. This forces your code to handle several variations. Each film page could be of a different variety. e.g. Like on several others, formatting on this page http://en.wikipedia.org/wiki/6th_Screen_Actors_Guild_Awards is different from this page http://en.wikipedia.org/wiki/21st_Screen_Actors_Guild_Awards. Our code had to take a different approach for each to extract the actors.
++ If any of the HTML we are targeting changes, my code will break. When targeting, be as specific as possible and rely on as few elements and attributes as possible.
++ Sometimes copying and pasting is faster than writing a script but will not be as reproducible. One particular task we tackled, pulling notable actors, was a great learning and portfolio building experience but too tedious for the end result.
