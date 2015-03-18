@@ -35,15 +35,17 @@ It will write a .csv file to './data/film_urls.csv' with the columns 'url,title,
 
 url,title,year
 
+`
 http://en.wikipedia.org/wiki/Lifeforce_(film), 'Lifeforce (film)',1985
-
+`
+***
+`
 http://en.wikipedia.org/wiki/Pat_and_Mike, 'Pat and Mike',1952
-
+`
+***
+`
 http://en.wikipedia.org/wiki/The_Tales_of_Hoffmann_(film), 'The Tales of Hoffmann (film)',1951
-
-http://en.wikipedia.org/wiki/All_or_Nothing_(film), 'All or Nothing (film)',2002
-
-http://en.wikipedia.org/wiki/Malli_(film), 'Malli (film)',1998
+`
 
 
 ### Step Two: Download the Films
@@ -110,7 +112,13 @@ Here are a few example rows from 'notable_actors.csv':
 
 `
 'Tom Hanks',http://en.wikipedia.org/wiki/Tom_Hanks,male,lead,'1st Screen Actors Guild Awards'
+`
+***
+`
 'Jodie Foster',http://en.wikipedia.org/wiki/Jodie_Foster,female,lead,'1st Screen Actors Guild Awards'
+`
+***
+`
 'Martin Landau',http://en.wikipedia.org/wiki/Martin_Landau,male,support,'1st Screen Actors Guild Awards'
 `
 
@@ -138,7 +146,13 @@ Here are a few example rows from 'producers_list.csv':
 
 `
 'Columbia Pictures',http://en.wikipedia.org/wiki/Columbia_Pictures'
+`
+***
+`
 'TriStar Pictures',http://en.wikipedia.org/wiki/TriStar_Pictures'
+`
+***
+`
 'Sony Pictures Classics',http://en.wikipedia.org/wiki/Sony_Pictures_Classics'
 `
 
