@@ -19,13 +19,13 @@ All scripts should be ran from the same location. This location should have a di
 ### General Notes
 + Unless otherwise noted, all scripts can be ran by typing 'python name-of-file.py'.
 + Some scripts will require an input file. Unless noted below, assume input is hard coded.
-+ Output will typically be placed where the scripts is ran or into a './data/' directory. Please create this directory ahead of time.
++ Output will typically be placed where the script is ran or into a './data/' directory. Please create this directory ahead of time.
 + Some scripts will also output the state of the script to the terminal but this is for logging only.
 + When pulling any entity from Wikipedia, we also grab the URL that represents that entity. This is perfect for uniquely identifying an entity such as a film or an actor. These URLs can then be used to join different data sets.
 
 ### Step One: Extract the Films URLs
 ##### film_url_extractor.py
-This script will extract film titles, film Wikipedia URLs, and film release year (because year happened to be easy to collect during this process) from the 'List of Films' article on Wikipedia. This list is organized by year and is also organized alphabetically. We found alphabetically to be a more straightforward approach.
+This script will extract film titles, film Wikipedia URLs, and film release year (because year happened to be easy to collect during this process) from the 'List of Films' article on Wikipedia. This list is organized by year and is also organized alphabetically. We found alphabetically to be a more straightforward approach to mine.
 
 ###### Input
 You do not need to provide any input via the command line. Since this file is custom built for a specific article, its input is hard coded. The file starts web mining at http://en.wikipedia.org/wiki/List_of_films:_numbers. From there it first mines the other pages it needs to mine for data such as http://en.wikipedia.org/wiki/List_of_films:_A, http://en.wikipedia.org/wiki/List_of_films:_B, http://en.wikipedia.org/wiki/List_of_films:_C, etc. The function that creates this index of lists of films is called 'parseFilmIndex(startURL)'. These end up being the input to the function that extracts the data, 'parseAllFilmPages(listOfFilmsURLs)'. Most of the data ends up being inside an item element which is parsed with 'parseITag(iTag)'.
