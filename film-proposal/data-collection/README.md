@@ -1,4 +1,4 @@
-## Readme
+# Readme
 This section describes the core source files that are necessary for collecting the data we need to analyze. It will list the scripts in the order they should be ran, since the output of a script may be necessary for the input of the next. Each section will contain a description of the script, how to run the script, the input requirements, and what to expect for output. We will start by listing the project's dependencies. 
 
 ### Environment Configuration
@@ -21,6 +21,7 @@ All scripts should be ran from the same location. This location should have a di
 + Some scripts will require an input file. Unless noted below, assume input is hard coded.
 + Output will typically be placed where the scripts is ran or into a './data/' directory. Please create this directory ahead of time.
 + Some scripts will also output the state of the script to the terminal but this is for logging only.
++ When pulling any entity from Wikipedia, we also grab the URL that represents that entity. This is perfect for uniquely identifying an entity such as a film or an actor. These URLs can then be used to join different data sets.
 
 ### Step One: Extract the Films URLs
 ##### film_url_extractor.py
@@ -31,7 +32,6 @@ You do not need to provide any input via the command line. Since this file is cu
 
 ###### Output
 It will write a .csv file to './data/film_urls.csv' with the columns 'url,title,year'. e.g.
-
 
 url,title,year
 
@@ -56,18 +56,22 @@ This script simply takes the output file, './data/film_urls.csv', from 'film_url
 ###### Output
 For each URL provided, there will be a 'page-name.html' file stored in './data/films/'. This file will contain the source code found at the given URL.
 
+
 ### Step Three: Parse the Film Files
 ##### film_data_extractor.py
-This is the script that does the primary data extraction. This script will parse all of the HTML files stored in './data/films/'.
+This is the script that does the primary data extraction. This script will parse all of the HTML files stored in './data/films/'. It turns each file into an HTML Beautiful Soup object and passes this object into a series of functions. Each function parses the page and returns a specific piece of data. All of this data for all of the films is placed in a single .csv file.
 
 ###### Input
-This script will process every file located in './data/films/'. It grabs every file in the given directory and processes it when possible.
+This script will process every file located in './data/films/'. It grabs every file in the given directory and processes it when possible. It assumes they are Wikipedia film pages downloaded directly from the web. It will only need the body of the pages.
 
 ###### Output
 It will create a .csv file where each row represents a film. Each row will have the following columns:
-'title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre'. Each of these will typically be the direct output from one of the several extractor functions defined in the file e.g. 'actor_extractor(filmPageSoup)' or 'budget_extractor(filmPageSoup)'.
 
-If column contains a list, it will be pipe, '|', separated. e.g.  'genre':
+'title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre'.
+
+Each of these will typically be the direct output from one of the several extractor functions defined in the file e.g. 'actor_extractor(filmPageSoup)' or 'budget_extractor(filmPageSoup)'.
+
+If the column contains a list, it will be pipe, '|', separated. e.g.  'genre':
 
 `
 fantasy|action|comedy
@@ -87,21 +91,57 @@ Here are a few example rows:
 ***
 `'Clueless (film)',http://en.wikipedia.org/wiki/Clueless_(film),1995-07-19,1995,20000000,56631572,Amy Heckerling;http://en.wikipedia.org/wiki/Amy_Heckerling,Alicia Silverstone;http://en.wikipedia.org/wiki/Alicia_Silverstone|Stacey Dash;http://en.wikipedia.org/wiki/Stacey_Dash|Brittany Murphy;http://en.wikipedia.org/wiki/Brittany_Murphy|Paul Rudd;http://en.wikipedia.org/wiki/Paul_Rudd|Donald Faison;http://en.wikipedia.org/wiki/Donald_Faison|Breckin Meyer;http://en.wikipedia.org/wiki/Breckin_Meyer|Dan Hedaya;http://en.wikipedia.org/wiki/Dan_Hedaya,Paramount Pictures;http://en.wikipedia.org/wiki/Paramount_Pictures,comedy`
 
+
 ### Collection of Notable Contributors
 #### Notable Actors
 ##### actor_extractor.py
+This script mines all of the actors that won the Screen Actors Guild Award.
 
+###### Input
+It only needs the root page, http://en.wikipedia.org/wiki/Screen_Actors_Guild_Award, to start with. This is hard coded in the script. From there it is able to pull all of the pages that represent each year the awards were held (e.g. http://en.wikipedia.org/wiki/1st_Screen_Actors_Guild_Awards and http://en.wikipedia.org/wiki/21st_Screen_Actors_Guild_Awards). On those specific award ceremony pages, we gain access to the actual actors who won that year.
+
+###### Output
+From each instance of an awards ceremony, the script grabs all male and female actors that received awards for an outstanding performance (e.g. "Outstanding Performance by a Male Actor in a Supporting Role" or "Outstanding Performance by a Female Actor in a Leading Role").
+
+For each actor it is able to pull out the following information:
+'name,url,gender,role,event'
+
+Here are a few example rows from 'notable_actors.csv':
+`
+'Tom Hanks',http://en.wikipedia.org/wiki/Tom_Hanks,male,lead,'1st Screen Actors Guild Awards'
+'Jodie Foster',http://en.wikipedia.org/wiki/Jodie_Foster,female,lead,'1st Screen Actors Guild Awards'
+'Martin Landau',http://en.wikipedia.org/wiki/Martin_Landau,male,support,'1st Screen Actors Guild Awards'
+`
 
 #### Notable Directors
 ##### director_extractor.py
+This script grabs all notable directors as listed on Wikipedia. It uses a similar technique as in the actor extractor.
 
+###### Input
+It takes in the page and list found at http://en.wikipedia.org/wiki/Film_director#Notable_individuals. This is hard coded in the script.
+
+###### Output
+It extracts each director's name and their Wikipedia URL. They are each placed in a final .csv file titled, 'directors_list.csv'.
 
 #### Notable Distributors
 ##### producer_extractor.py
+This script simply extracts a list of film filmmaking, film distribution companies from Wikipedia. It uses a similar technique as in the director extractor.
 
+###### Input
+It pulls the name and Wikipedia URLs of the production companies from the 'Notable production companies' section at http://en.wikipedia.org/wiki/List_of_film_production_companies.
+
+###### Output
+It pulls the names and URLs of each entity as with the other extractor scripts.
+
+Here are a few example rows from 'producers_list.csv':
+`
+'Columbia Pictures',http://en.wikipedia.org/wiki/Columbia_Pictures'
+'TriStar Pictures',http://en.wikipedia.org/wiki/TriStar_Pictures'
+'Sony Pictures Classics',http://en.wikipedia.org/wiki/Sony_Pictures_Classics'
+`
 
 ### Lessons learned while web mining Wikipedia:
 + The Wikipedia Python API library is not magical. Paul hardly used it at all when pulling notable actors for example. We mostly did standard web mining with Beautiful Soup.
 + Wikipedia pages that are supposed to have the same exact type of content can be formatted completely different. This forces your code to handle several variations. Each film page could be of a different variety. e.g. Like on several others, formatting on this page http://en.wikipedia.org/wiki/6th_Screen_Actors_Guild_Awards is different from this page http://en.wikipedia.org/wiki/21st_Screen_Actors_Guild_Awards. Our code had to take a different approach for each to extract the actors.
-+ If any of the HTML we are targeting changes, my code will break. When targeting, be as specific as possible and rely on as few elements and attributes as possible.
++ If any of the HTML we are targeting changes, our code will break. When targeting content, we needed to be as specific as possible and rely on as few elements and attributes as possible.
 + Sometimes copying and pasting is faster than writing a script but will not be as reproducible. One particular task we tackled, pulling notable actors, was a great learning and portfolio building experience but too tedious for the end result.
