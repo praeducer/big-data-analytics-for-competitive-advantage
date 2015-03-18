@@ -107,6 +107,7 @@ For each actor it is able to pull out the following information:
 'name,url,gender,role,event'
 
 Here are a few example rows from 'notable_actors.csv':
+
 `
 'Tom Hanks',http://en.wikipedia.org/wiki/Tom_Hanks,male,lead,'1st Screen Actors Guild Awards'
 'Jodie Foster',http://en.wikipedia.org/wiki/Jodie_Foster,female,lead,'1st Screen Actors Guild Awards'
@@ -134,6 +135,7 @@ It pulls the name and Wikipedia URLs of the production companies from the 'Notab
 It pulls the names and URLs of each entity as with the other extractor scripts.
 
 Here are a few example rows from 'producers_list.csv':
+
 `
 'Columbia Pictures',http://en.wikipedia.org/wiki/Columbia_Pictures'
 'TriStar Pictures',http://en.wikipedia.org/wiki/TriStar_Pictures'
