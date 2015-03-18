@@ -69,7 +69,7 @@ It will create a .csv file where each row represents a film. Each row will have 
 
 'title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre'.
 
-Each of these will typically be the direct output from one of the several extractor functions defined in the file e.g. 'actor_extractor(filmPageSoup)' or 'budget_extractor(filmPageSoup)'.
+Each of these will typically be the direct output from one of the several extractor functions defined in the file e.g. 'actor_extractor(filmPageSoup)' or 'budget_extractor(filmPageSoup)'. If the data is not found, 'null' is returned.
 
 If the column contains a list, it will be pipe, '|', separated. e.g.  'genre':
 
