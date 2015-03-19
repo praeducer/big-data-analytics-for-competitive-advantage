@@ -1,5 +1,9 @@
 # Readme
-This section describes the core source files that are necessary for collecting the data we need to analyze. It will list the scripts in the order they should be ran, since the output of a script may be necessary for the input of the next. Each section will contain a description of the script, how to run the script, the input requirements, and what to expect for output. We will start by listing the project's dependencies. 
+
+Business Problem:
+Understand trends in the film industry in order to use predictive analysis to determine what type of movie will yield the highest return on investment.
+
+This readme describes the core source files that are necessary for collecting the data we need to analyze to solve the above business problem. It will list the scripts in the order they should be ran, since the output of a script may be necessary for the input of the next. Each section will contain a description of the script, how to run the script, the input requirements, and what to expect for output. We will start by listing the project's dependencies. 
 
 ### Environment Configuration
 #### Python Libraries
