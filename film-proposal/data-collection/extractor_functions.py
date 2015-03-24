@@ -236,23 +236,7 @@ Revenue function errors:
 """
 
 filmURLs = [
-'http://en.wikipedia.org/wiki/Wish_You_Were_Here_(1987_film)',
-'http://en.wikipedia.org/wiki/The_Groomsmen',
-'http://en.wikipedia.org/wiki/10_to_Midnight',
-'http://en.wikipedia.org/wiki/Jason%27s_Lyric',
-'http://en.wikipedia.org/wiki/The_Secret_of_the_Grain',
-'http://en.wikipedia.org/wiki/Second_in_Command',
-'http://en.wikipedia.org/wiki/Big_Jim_McLain',
-'http://en.wikipedia.org/wiki/What_Have_I_Done_to_Deserve_This%3F_(film)',
-'http://en.wikipedia.org/wiki/Queen_Christina_(film)',
-'http://en.wikipedia.org/wiki/Alexander%27s_Ragtime_Band_(film)',
-'http://en.wikipedia.org/wiki/Aaru_(film)',
-'http://en.wikipedia.org/wiki/Jinxed!',
-'http://en.wikipedia.org/wiki/The_Thirteenth_Warrior',
-'http://en.wikipedia.org/wiki/Rosemary%27s_Baby_(film)',
-'http://en.wikipedia.org/wiki/Dave_Chappelle%27s_Block_Party',
-'http://en.wikipedia.org/wiki/Give_Seven_Days'
-
+'http://en.wikipedia.org/wiki/Avatar_(2009_film)'
 ]
 
 #Main list of film Genres scrubbed programatically from Wikipedia, supplemented by list found at http://www.imdb.com/genre/
@@ -292,7 +276,9 @@ filmGenres = [
 'Vampires',
 'Children',
 'Adventure',
-'Sci-fi'
+'Sci-fi',
+'Science',
+'Fiction'
 ]
 
 for filmURL in filmURLs:
@@ -305,11 +291,14 @@ for filmURL in filmURLs:
 	revenueData = revenue_extractor(filmPageSoup);
 	releaseDate = release_date_extractor(filmPageSoup);
 	genreList = genre_extractor(filmPageSoup);
+	
+	for directorTuple in directorData:
+		print("Director: ");
+		print(directorTuple);
 
-	print(filmBudget);
-#	for directorTuple in directorData:
-#		print("Director: ");
-#		print(directorTuple);
+	for genre in genreList:
+		print("Genre: ");
+		print(genre);
 
-#	print('Release Date: ');
-#	print(releaseDate);
+	for actorTuple in actorData:
+		print(actorTuple);
