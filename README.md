@@ -15,6 +15,5 @@ competitive advantage during industry transition.
 + Paul Prae
 + Sarah Vasquez
 + Joy Pinchback
-+ Babar Khan
 + Daniel Joensen
 + Benjamin Adelman
