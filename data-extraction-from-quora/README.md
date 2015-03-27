@@ -14,4 +14,3 @@ Contributions:
 + Updated to filter out bad links by Paul Prae.
 + Updated to take in a command line argument by Paul Prae.
 + Updated to output to a text file by Sarah Vasquez.
-+ Consultation and design provided by Joy Pinchback, Babar Khan, and Daniel 
