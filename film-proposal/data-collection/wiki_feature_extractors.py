@@ -12,9 +12,11 @@ import csv
 
 wikipediaRoot = 'http://en.wikipedia.org';
 
+# TODO: There should only be one 'return' almost ever. This shits crazy bro.
+# TODO: Follow DRY (don't repeat yourself). Way too many duplicate actions such as all the replaces.
 def find_budget(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
-
+	filmBudget = '';
 	try:
 		summaryTableRows = summaryTable.find_all('tr');
 
@@ -75,14 +77,18 @@ def find_budget(filmPageSoup):
 							filmBudget = filmBudget.replace(' ','').replace(')','');
 							return filmBudget;
 	except (AttributeError, IndexError):
-		filmBudget = "null";
-		return filmBudget;
+		filmBudget = 'null';
+
+	if not filmBudget:
+		filmBudget = 'null';
+
+	return filmBudget.replace(',','');
 
 
 def find_revenue(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 
-	revenueData = "";
+	filmRevenue = "";
 
 	try:
 		summaryTableRows = summaryTable.find_all('tr');
@@ -95,11 +101,14 @@ def find_revenue(filmPageSoup):
 				poundFind = filmRevenue.find('£');
 				# TODO: purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
 				if poundFind == -1:
-					revenueData = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
+					filmRevenue = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
 	except (AttributeError,IndexError):
-		revenueData = "null";
+		filmRevenue = 'null';
 
-	return revenueData.replace(',','');
+	if not filmRevenue:
+		filmRevenue = 'null'; 
+
+	return filmRevenue.replace(',','');
 
 def find_director(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});	
@@ -195,7 +204,9 @@ def find_release_date(filmPageSoup):
 				releaseDate = releaseDate.replace('\n','');
 
 	except AttributeError:
-		releaseDate = ("null");
+		releaseDate = 'null';
+	if not releaseDate:
+		releaseDate = 'null';
 
 	return releaseDate;
 

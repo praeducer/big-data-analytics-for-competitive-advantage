@@ -19,13 +19,19 @@ def tuples_to_column_value(notableData):
 		notableURL = notableTuple['url'];
 		pipesAndTuples += notableName + ';' + notableURL + '|';
 	# Removing last pipe
-	return pipesAndTuples[:-1];
+	finalValue = pipesAndTuples[:-1]
+	if not finalValue:
+		finalValue = 'null';
+	return finalValue;
 
 def list_to_column_value(dataList):
 	columnValue = "";
 	for item in dataList:
 		columnValue += item + '|';
-	return columnValue[:-1];
+	columnValue = columnValue[:-1];
+	if not columnValue:
+		columnValue = 'null';
+	return columnValue;
 
 def build_film_index():
 	filmIndex = {};
@@ -60,8 +66,6 @@ if __name__=="__main__":
 		filmURL = 'http://en.wikipedia.org/wiki/' + filmURLName;
 		
 		filmDate = wiki_feature_extractors.find_release_date(filmPageSoup);
-		if not filmDate:
-			filmDate = 'null';
 
 		budgetValue = wiki_feature_extractors.find_budget(filmPageSoup);
 		if not budgetValue:
@@ -69,28 +73,18 @@ if __name__=="__main__":
 		budgetValue = budgetValue.replace(',','');
 
 		revenueValue = wiki_feature_extractors.find_revenue(filmPageSoup);
-		if not revenueValue:
-			revenueValue = 'null'; 
 
 		directorData = wiki_feature_extractors.find_director(filmPageSoup);
 		directorValue = tuples_to_column_value(directorData);
-		if not directorValue:
-			directorValue = 'null';
 
 		actorData = wiki_feature_extractors.find_actor(filmPageSoup);
 		actorValue = tuples_to_column_value(actorData);
-		if not actorValue:
-			actorValue = 'null';		
 
 		distributionData = wiki_feature_extractors.find_distribution_company(filmPageSoup);
 		distributionValue = tuples_to_column_value(distributionData);
-		if not distributionValue:
-			distributionValue = 'null';
 
 		genreData = wiki_feature_extractors.find_genre(filmPageSoup);
 		genreValue = list_to_column_value(genreData);
-		if not genreValue:
-			genreValue = 'null';
 
 		try:
 			filmData = filmIndex.get(filmURL);
