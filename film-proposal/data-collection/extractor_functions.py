@@ -176,7 +176,7 @@ def revenue_extractor(filmPageSoup):
 				filmRevenue = filmRevenue.strip();
 				filmRevenue = filmRevenue.replace('\n','');
 				poundFind = filmRevenue.find('£');
-				#purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
+				#TODO: purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
 				if poundFind == -1:
 					filmRevenue = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
 					revenueData.append(filmRevenue);

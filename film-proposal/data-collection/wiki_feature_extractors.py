@@ -8,12 +8,74 @@ import sys
 import re
 from bs4 import BeautifulSoup
 import wikipedia
+import urllib
 import csv
 
 wikipediaRoot = 'http://en.wikipedia.org';
 
 # TODO: There should only be one 'return' almost ever. This shits crazy bro.
 # TODO: Follow DRY (don't repeat yourself). Way too many duplicate actions such as all the replaces.
+
+	# Dan - Thanks for the notes, they were super helpful!  I tried to implement your suggestions as best as I could :).  I think the dollar cleaner is a significantly better this time around!
+
+def dollar_cleaner(dollarField):
+
+	try:
+		dollarField = dollarField.split('$')[1].split('[')[0].strip();
+		openingIndex = dollarField.find('(');
+		closingIndex = dollarField.find(')');
+		dollarField = dollarField[0:openingIndex] + '' + dollarField[closingIndex:(len(dollarField))];
+		dollarField = dollarField.replace(' ','').replace(')','')
+		poundFind = dollarField.find('£');
+
+		if poundFind == -1:
+			if 'billion' in dollarField:
+				dollarField = dollarField.replace('billion','');
+				if dollarField.find('.') == -1:
+					dollarField = int(dollarField) * 1000000000;
+				else:
+					itemList = dollarField.split('.');
+					dollarField = dollarField.replace('.','');
+					if len(itemList[1]) == 1:
+						dollarField = int(dollarField) * 100000000;
+					elif len(itemList[1]) == 2:
+						dollarField = int(dollarField) * 10000000;
+					else:
+						dollarField = int(dollarField) * 1000000;
+			elif 'million' in dollarField:
+				dollarField = dollarField.replace('million','');
+				if dollarField.find('.') == -1:
+					dollarField = int(dollarField) * 1000000;
+				else:
+					itemList = dollarField.split('.');
+					dollarField = dollarField.replace('.','');
+					if len(itemList[1]) == 1:
+						dollarField = int(dollarField) * 100000;
+					elif len(itemList[1]) == 2:
+						dollarField = int(dollarField) * 10000;
+					else:
+						dollarField = int(dollarField) * 1000;
+			elif 'thousand' in dollarField:
+				dollarField = replace('thousand','');
+				if dollarField.find('.') == -1:
+					dollarField = int(dollarField) * 1000;
+				else:
+					itemList = dollarField.split('.');
+					dollarField = dollarField.replace('.','');
+					if len(itemList[1]) == 1:
+						dollarField = int(dollarField) * 100;
+					elif len(itemList[1]) == 2:
+						dollarField = int(dollarField) * 10;
+					else:
+						dollarField = int(dollarField) * 1;
+			else:
+				dollarField = dollarField;
+	
+	except (AttributeError, IndexError):
+		dollarField = "null";
+
+	return dollarField;
+
 def find_budget(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 	filmBudget = '';
@@ -22,60 +84,10 @@ def find_budget(filmPageSoup):
 
 		for row in summaryTableRows:
 			if 'Budget' in row.text:
-				filmBudget = row.text;
-				filmBudget = filmBudget.strip();
-				filmBudget = filmBudget.replace('\n','');
-				decimalFind = filmBudget.find('.');
-				poundFind = filmBudget.find('£');
-				if poundFind == -1:
-					if decimalFind == -1:
-						if 'million' in filmBudget:
-							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace(' ','').strip();
-							filmBudget = filmBudget + ',000,000';
-							openingIndex = filmBudget.find('(');
-							closingIndex = filmBudget.find(')');
-							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
-							filmBudget = filmBudget.replace(' ','').replace(')','');
-							return filmBudget;
-						elif 'thousand' in filmBudget:
-							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').strip();
-							filmBudget = filmBudget + ',000';
-							openingIndex = filmBudget.find('(');
-							closingIndex = filmBudget.find(')');
-							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
-							filmBudget = filmBudget.replace(' ','').replace(')','');
-							return filmBudget;
-						else:
-							filmBudget = filmBudget.split('$')[1].split('[')[0].strip();
-							openingIndex = filmBudget.find('(');
-							closingIndex = filmBudget.find(')');
-							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
-							filmBudget = filmBudget.replace(' ','').replace(')','');
-							return filmBudget;
-					else:
-						if 'million' in filmBudget:
-							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('million','').replace('.',',').strip();
-							filmBudget = filmBudget + '00,000';
-							openingIndex = filmBudget.find('(');
-							closingIndex = filmBudget.find(')');
-							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
-							filmBudget = filmBudget.replace(' ','').replace(')','');
-							return filmBudget;
-						elif 'thousand' in filmBudget:
-							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('thousand','').replace('.',',').strip();
-							filmBudget = filmBudget + '00';
-							openingIndex = filmBudget.find('(');
-							closingIndex = filmBudget.find(')');
-							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
-							filmBudget = filmBudget.replace(' ','').replace(')','');
-							return filmBudget;
-						else:
-							filmBudget = filmBudget.split('$')[1].split('[')[0].replace('.',',').strip();
-							openingIndex = filmBudget.find('(');
-							closingIndex = filmBudget.find(')');
-							filmBudget = filmBudget[0:openingIndex] + '' + filmBudget[closingIndex:(len(filmBudget))];
-							filmBudget = filmBudget.replace(' ','').replace(')','');
-							return filmBudget;
+				dollarField = row.text;
+				filmBudget = dollar_cleaner(dollarField);
+				filmBudget = str(filmBudget);
+
 	except (AttributeError, IndexError):
 		filmBudget = 'null';
 
@@ -87,7 +99,6 @@ def find_budget(filmPageSoup):
 
 def find_revenue(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
-
 	filmRevenue = "";
 
 	try:
@@ -95,13 +106,10 @@ def find_revenue(filmPageSoup):
 
 		for row in summaryTableRows:
 			if 'Box' in row.text:
-				filmRevenue = row.text;
-				filmRevenue = filmRevenue.strip();
-				filmRevenue = filmRevenue.replace('\n','');
-				poundFind = filmRevenue.find('£');
-				# TODO: purposefully left the if statement for pound find open so that it is passed over if pounds are found, converting pounds to dollars will be a challenge.  may look at this later.
-				if poundFind == -1:
-					filmRevenue = filmRevenue.split('$')[1].split('[')[0].replace('.',',').strip();
+				dollarField = row.text;
+				filmRevenue	= dollar_cleaner(dollarField);
+				filmRevenue = str(filmRevenue);
+
 	except (AttributeError,IndexError):
 		filmRevenue = 'null';
 
@@ -272,3 +280,38 @@ def find_genre(filmPageSoup):
 			genreList.append("null");
 
 	return genreList;
+
+
+
+""" Code for testing only
+filmURLs = [
+'http://en.wikipedia.org/wiki/The_Unbearable_Lightness_of_Being_(film)',
+'http://en.wikipedia.org/wiki/Nim%27s_Island',
+'http://en.wikipedia.org/wiki/Philomena_(film)',
+'http://en.wikipedia.org/wiki/Where_the_Wild_Things_Are_(film)',
+'http://en.wikipedia.org/wiki/Moonlight_Mile_(film)',
+'http://en.wikipedia.org/wiki/Elephant_(2003_film)',
+'http://en.wikipedia.org/wiki/Kissing_Jessica_Stein',
+'http://en.wikipedia.org/wiki/Ruby_in_Paradise',
+'http://en.wikipedia.org/wiki/Duckweed_(film)',
+'http://en.wikipedia.org/wiki/Love_Is_All_You_Need',
+'http://en.wikipedia.org/wiki/Surveillance_(2008_film)',
+'http://en.wikipedia.org/wiki/Any_Given_Sunday',
+'http://en.wikipedia.org/wiki/Hope_and_Glory_(film)',
+'http://en.wikipedia.org/wiki/Dirty_Work_(1998_film)',
+'http://en.wikipedia.org/wiki/Next_Day_Air',
+'http://en.wikipedia.org/wiki/8:_The_Mormon_Proposition',
+'http://en.wikipedia.org/wiki/The_Deep_End_(film)',
+'http://en.wikipedia.org/wiki/What%27s_Eating_Gilbert_Grape',
+'http://en.wikipedia.org/wiki/Rubber_(2010_film)',
+'http://en.wikipedia.org/wiki/A_Lady_Without_Passport'
+]
+
+for filmURL in filmURLs:
+	
+	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
+	filmBudget = find_budget(filmPageSoup);
+	filmRevenue = find_revenue(filmPageSoup);
+	print("Film Revenue: ");
+	print(filmRevenue);
+"""
