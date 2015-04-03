@@ -9,7 +9,7 @@ import csv
 import requests
 
 filmDataFilename = './data/test_film_urls.csv';
-filmDataReader = csv.reader(open(filmDataFilename));
+filmDataReader = csv.reader(open(filmDataFilename, encoding="utf8"));
 filmDataReader.__next__();
 count = 0;
 for filmData in filmDataReader:

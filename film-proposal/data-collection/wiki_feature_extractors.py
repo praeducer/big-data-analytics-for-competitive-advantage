@@ -12,7 +12,7 @@ import csv
 
 wikipediaRoot = 'http://en.wikipedia.org';
 
-def budget_extractor(filmPageSoup):
+def find_budget(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 
 	try:
@@ -79,7 +79,7 @@ def budget_extractor(filmPageSoup):
 		return filmBudget;
 
 
-def revenue_extractor(filmPageSoup):
+def find_revenue(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 
 	revenueData = "";
@@ -101,7 +101,7 @@ def revenue_extractor(filmPageSoup):
 
 	return revenueData.replace(',','');
 
-def director_extractor(filmPageSoup):
+def find_director(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});	
 	directorData = [];
 
@@ -130,7 +130,7 @@ def director_extractor(filmPageSoup):
 
 	return directorData;
 
-def actor_extractor(filmPageSoup):
+def find_actor(filmPageSoup):
 
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 	actorData = [];
@@ -152,7 +152,7 @@ def actor_extractor(filmPageSoup):
 
 	return actorData;
 
-def distribution_company_extractor(filmPageSoup):
+def find_distribution_company(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});	
 	distributionCompanyData = [];
 
@@ -182,7 +182,7 @@ def distribution_company_extractor(filmPageSoup):
 	return distributionCompanyData;
 
 # TODO: Still need to handle films that list multiple dates, commonly for different countries
-def release_date_extractor(filmPageSoup):
+def find_release_date(filmPageSoup):
 	summaryTable = filmPageSoup.find('table',{ 'class' : 'infobox vevent'});
 	releaseDate = "";
 	try:
@@ -199,7 +199,7 @@ def release_date_extractor(filmPageSoup):
 
 	return releaseDate;
 
-def genre_extractor(filmPageSoup):
+def find_genre(filmPageSoup):
 	genreList = [];
 	# Main list of film Genres scrubbed programatically from Wikipedia, supplemented by list found at http://www.imdb.com/genre/
 	filmGenres = [
@@ -261,97 +261,3 @@ def genre_extractor(filmPageSoup):
 			genreList.append("null");
 
 	return genreList;
-
-def tuples_to_column_value(notableData):
-	pipesAndTuples = "";
-	for notableTuple in notableData:
-		notableName = notableTuple['name'];
-		notableURL = notableTuple['url'];
-		pipesAndTuples += notableName + ';' + notableURL + '|';
-	# Removing last pipe
-	return pipesAndTuples[:-1];
-
-def list_to_column_value(dataList):
-	columnValue = "";
-	for item in dataList:
-		columnValue += item + '|';
-	return columnValue[:-1];
-
-def build_film_index():
-	filmIndex = {};
-	filmDataFilename = './data/film_urls.csv';
-	filmDataReader = csv.reader(open(filmDataFilename));
-	filmDataReader.__next__();
-	count = 0;
-	for filmData in filmDataReader:
-		count += 1;
-		filmIndex[filmData[0]] = {'title': filmData[1], 'year': filmData[2]};
-	return filmIndex;
-
-if __name__=="__main__":
-
-	filmWriter = csv.writer(open('./data/film_data.csv', 'w'));
-	filmIndex = build_film_index();
-	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre']);
-	relativeFilmFilePath = './data/films/';
-	filmFiles = os.listdir(relativeFilmFilePath);
-	for filmFileName in filmFiles:
-		print(filmFileName);
-		fullFilmFilePath = relativeFilmFilePath + filmFileName;
-		try:
-			filmPage = open(fullFilmFilePath);
-		except IsADirectoryError:
-			pass;
-		filmPageSoup = BeautifulSoup(filmPage.read());
-
-		filmURLName = os.path.splitext(filmFileName)[0];
-		filmURL = 'http://en.wikipedia.org/wiki/' + filmURLName;
-		
-		filmDate = release_date_extractor(filmPageSoup);
-		if not filmDate:
-			filmDate = 'null';
-
-		budgetValue = budget_extractor(filmPageSoup);
-		if not budgetValue:
-			budgetValue = 'null';
-		budgetValue = budgetValue.replace(',','');
-
-		revenueValue = revenue_extractor(filmPageSoup);
-		if not revenueValue:
-			revenueValue = 'null'; 
-
-		directorData = director_extractor(filmPageSoup);
-		directorValue = tuples_to_column_value(directorData);
-		if not directorValue:
-			directorValue = 'null';
-
-		actorData = actor_extractor(filmPageSoup);
-		actorValue = tuples_to_column_value(actorData);
-		if not actorValue:
-			actorValue = 'null';		
-
-		distributionData = distribution_company_extractor(filmPageSoup);
-		distributionValue = tuples_to_column_value(distributionData);
-		if not distributionValue:
-			distributionValue = 'null';
-
-		genreData = genre_extractor(filmPageSoup);
-		genreValue = list_to_column_value(genreData);
-		if not genreValue:
-			genreValue = 'null';
-
-		try:
-			filmData = filmIndex.get(filmURL);
-			if filmData:
-				filmTitle = filmData.get('title');
-				if not filmTitle:
-					filmTitle = 'null';
-				filmYear = filmData.get('year');
-				if not filmYear:
-					filmYear = 'null';
-			else:
-				filmTitle = 'null';
-				filmYear = 'null';
-			filmWriter.writerow([filmTitle, filmURL, filmDate, filmYear, budgetValue, revenueValue, directorValue, actorValue, distributionValue, genreValue]);
-		except KeyError:
-			pass;
