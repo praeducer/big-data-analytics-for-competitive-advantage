@@ -1,4 +1,4 @@
-# description: Pull important data from Wikipedia film pages stored locally.
+# description: Pull features from Wikipedia pages. Intended for film pages so far.
 # authors: Paul Prae, Daniel Joensen
 # since: 3/08/2015
 # tested with Python 3.3 on CentOS 7
