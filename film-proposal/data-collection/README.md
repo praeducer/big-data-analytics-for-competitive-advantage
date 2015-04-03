@@ -64,7 +64,7 @@ For each URL provided, there will be a 'page-name.html' file stored in './data/f
 
 
 ### Step Three: Parse the Film Files
-##### film_data_extractor.py
+##### wiki_film_feature_extractor.py
 This is the script that does the primary data extraction. This script will parse all of the HTML files stored in './data/films/'. It turns each file into an HTML Beautiful Soup object and passes this object into a series of functions. Each function parses the page and returns a specific piece of data. All of this data for all of the films is placed in a single .csv file.
 
 ###### Input
