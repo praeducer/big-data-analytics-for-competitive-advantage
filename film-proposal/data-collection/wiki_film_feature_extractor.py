@@ -1,7 +1,7 @@
 # description: Pull important data from Wikipedia film pages stored locally.
 # authors: Paul Prae, Daniel Joensen
 # since: 3/08/2015
-# tested with Python 3.3 on CentOS 7
+# tested with Python 3.3 on CentOS 7 and Windows 8
 # TODO: Create reducer function
 # TODO: Add in command line parameters
 # --mapper	turns this into a script that acts as just the mapper function.
@@ -121,4 +121,3 @@ if __name__=="__main__":
 		inputDirectory = './data/films/test/';
 		outputFile = './data/test_film_data.csv';
 		loopLocal(stdIO, inputDirectory, outputFile);
-		
