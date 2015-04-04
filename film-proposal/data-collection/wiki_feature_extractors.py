@@ -13,11 +13,6 @@ import csv
 
 wikipediaRoot = 'http://en.wikipedia.org';
 
-# TODO: There should only be one 'return' almost ever. This shits crazy bro.
-# TODO: Follow DRY (don't repeat yourself). Way too many duplicate actions such as all the replaces.
-
-	# Dan - Thanks for the notes, they were super helpful!  I tried to implement your suggestions as best as I could :).  I think the dollar cleaner is a significantly better this time around!
-
 def dollar_cleaner(dollarField):
 
 	try:
