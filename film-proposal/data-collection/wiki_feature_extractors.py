@@ -207,6 +207,8 @@ def find_release_date(filmPageSoup):
 				releaseDate = releaseDate.strip();
 				releaseDate = releaseDate.replace('\n','');
 
+#TODO: Add parsedatetime library, pass in release date and check output
+
 	except AttributeError:
 		releaseDate = 'null';
 	if not releaseDate:
