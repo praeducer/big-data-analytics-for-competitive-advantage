@@ -89,6 +89,7 @@ def mapper(fullFilmFilePath, filmIndex, stdIO):
 			if not filmTitle:
 				filmTitle = filmURLName;
 			filmYear = filmData.get('year');
+			# TODO: filmYear still ends up blank sometimes. whitespace?
 			if not filmYear:
 				filmYear = 'null';
 		else:
