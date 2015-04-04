@@ -46,7 +46,7 @@ def build_film_index():
 
 if __name__=="__main__":
 
-	filmWriter = csv.writer(open('./data/test_film_data.csv', 'w'));
+	filmWriter = csv.writer(open('./data/test_film_data.csv', 'w', newline=''));
 	filmIndex = build_film_index();
 	filmWriter.writerow(['title', 'url', 'release date', 'release year', 'budget', 'revenue', 'director', 'actor', 'distributor', 'genre']);
 	relativeFilmFilePath = './data/films/test/';
@@ -61,7 +61,6 @@ if __name__=="__main__":
 		except IsADirectoryError:
 			pass;
 		filmPageSoup = BeautifulSoup(filmPage.read());
-
 		filmURLName = os.path.splitext(filmFileName)[0];
 		filmURL = 'http://en.wikipedia.org/wiki/' + filmURLName;
 		

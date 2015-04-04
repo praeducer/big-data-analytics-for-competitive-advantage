@@ -1,5 +1,6 @@
 # description: Pull features from Wikipedia pages. Intended for film pages so far.
-# authors: Paul Prae, Daniel Joensen
+# authors: Daniel Joensen (primary contributor), Paul Prae (cleaning crew)
+# note: During refactoring, much of this code was copied over by Paul from a file Daniel wrote. Git blame is not accurate.
 # since: 3/08/2015
 # tested with Python 3.3 on CentOS 7
 
