@@ -10,43 +10,74 @@ import sys
 import wikipedia
 import csv
 import codecs
+# TODO: Consider https://code.google.com/p/pylevenshtein/ instead
+import difflib
 
-outputFilename = './data/omdb/test/omdb_movies_wikipedia_urls_tiny_sample.csv';
-filmDataWriter = csv.writer(open(outputFilename,'w', encoding="utf8", newline=''), delimiter='\t');
-inputFilename = './data/omdb/test/omdbMovies_tiny_sample.txt';
-filmDataReader = csv.reader(open(inputFilename, encoding="utf8"),delimiter='\t');
-filmDataReader.__next__();
-urls = [];
-count = 0;
+def bestURLSearch(query, count):
+	printQuery(query, count, 'best');
+	searchResults = wikipedia.search(query);
+	return findBestURL(query, count, searchResults, False);
 
-for line in filmDataReader:
-	count += 1;
-	title = line[2];
-	query = title.strip('\n\r') + ' (film)';
+def findPageURL(query, count):
 	try:
-		print(str(count) + ' - ' + 'query: ' + query);
+		printQuery(query, count, 'find');
+		page = wikipedia.page(query);
+		# TODO: if page contents do not have the query in it search query again after removing '(film)'
+		if '(film)' in query and page.summary:
+			query = query.replace('(film)', '');
+			if not query in page.summary:
+				return bestURLSearch(query, count);
+		return page.url;
+	except wikipedia.exceptions.DisambiguationError as e:
+		print("\t! - DisambiguationError: Searching through other options.");
+		return findBestURL(query, count, e.options, True);
+
+def findBestURL(query, count, options, hadPreviousException):
+	try:
+		bestMatch = difflib.get_close_matches(query, options, 1)
+		# prevents an infinite loop
+		if(hadPreviousException and not bestMatch):
+			# do the search for 'film' in the options. else return url = 'N/A'.
+			for option in options:
+				print('\toption: ' + option);
+				if 'film)' in option:
+					return findPageURL(option, count)
+				else:
+					return 'N/A';
+		return findPageURL(bestMatch[0], count);
+	except IndexError:
+		print("\t! - IndexError: No best match from search results. Trying Wikipedia's best guess.");
+		return findPageURL(query, count);
+
+def printQuery(query, count, message):
+	try:
+		print(str(count) + ' - ' + message +  ' query: ' + query);
 	except UnicodeEncodeError:
 		print(str(count) + ' - ' + 'query: <UnicodeEncodeError during print. Search is fine.>');
-	try:
-		# Note: This can sometimes auto-suggest or redirect to odd pages.
-		# TODO: Handle case when page "does not exist" and the first result is automatically given
-		page = wikipedia.page(query);
-		url = page.url;
+
+if __name__=="__main__":
+	outputFilename = './data/omdb/test/omdb_movies_wikipedia_urls_tiny_sample.csv';
+	filmDataWriter = csv.writer(open(outputFilename,'w', encoding="utf8", newline=''), delimiter='\t');
+	inputFilename = './data/omdb/test/omdbMovies_tiny_sample.txt';
+	filmDataReader = csv.reader(open(inputFilename, encoding="utf8"),delimiter='\t');
+	filmDataReader.__next__();
+	urls = [];
+	count = 0;
+
+	for line in filmDataReader:
+		count += 1;
+		title = line[2];
+		query = title.strip('\n\r') + ' (film)';
+		try:
+			# Note: This can sometimes auto-suggest or redirect to odd pages.
+			# TODO: Handle case when page "does not exist" and the first result is automatically given
+			url = bestURLSearch(query, count);
+		except wikipedia.exceptions.PageError:
+			print("\t! - PageError");
+			url = 'N/A';
+		if not url:
+			print("\t! - Empty URL");
+			url = 'N/A';
 		print('\tresult-> ' + url);
-	except wikipedia.exceptions.DisambiguationError as e:
-		for option in e.options:
-			print('\toption: ' + option);
-			if 'film)' in option:
-				# TODO: This problem may happen recursively...
-				page = wikipedia.page(option);
-				url = page.url
-				print('\t\tresult-> ' + url);
-				break;
-			else:
-				url = 'N/A';
-	except wikipedia.exceptions.PageError:
-		url = 'N/A';
-	if not url:
-		url = 'N/A';
-	line.append(url);
-	filmDataWriter.writerow(line);
+		line.append(url);
+		filmDataWriter.writerow(line);
