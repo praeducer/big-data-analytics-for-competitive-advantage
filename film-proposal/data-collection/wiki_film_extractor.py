@@ -6,7 +6,7 @@
 # TODO: Add in command line parameters
 # --mapper	turns this into a script that acts as just the mapper function.
 # --reducer	turns this into a script that acts as just the reducer function.
-# --stdio	uses STDIN as the input and STDOUT as the output for the map reduce functions. may need to always assume if a map or reduce flas is present this is true.
+# --stdio	uses STDIN as the input and STDOUT as the output for the map reduce functions. may need to always assume this if a map or reduce flag is present this is true.
 # otherwise run this locally with a loop over a list of directory names.
 
 import os
