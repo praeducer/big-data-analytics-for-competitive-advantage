@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 #TODO: finish opening weekend revenue function
 #TODO: build number of theaters function
 
-movie_ID = 'ateam.htm';
+movie_ID = 'avatar.htm';
 base_URL = 'http://www.boxofficemojo.com/movies';
 movie_URL = ('%s/?id=%s' % (base_URL,movie_ID));
 movie_soup = BeautifulSoup(urllib.request.urlopen(movie_URL));
@@ -46,12 +46,18 @@ def find_global_total(movie_soup):
 			global_total = global_total.split()[2];
 	return global_total
 
-def find_opening_weekend_total(movie_soup):
-	revenue_table = movie_soup.find('div', {'class':'mp_box_content'});
-	revenue_table_rows = revenue_table.find_all('tr');
-	for row in revenue_table_rows:
-		row = str(row).encode('utf-8','ignore');
-		print(row);
+
+#def find_opening_weekend_total(movie_soup):
+revenue_table = movie_soup.find_all('div', {'class':'mp_box_content'});
+for table in revenue_table:
+	table = str(table).encode('utf-8','ignore');
+	print(table);
+#	revenue_table_rows = revenue_table.find_all('tr');
+#	for row in revenue_table_rows:
+#		row = str(row).encode('utf-8','ignore');
+#		print(row);
+
+
 #	for column in revenue_table_columns:
 #		if 'Opening' and 'Weekend' in column.text:
 #			opening_weekend_total = column.text;
@@ -62,7 +68,7 @@ def find_opening_weekend_total(movie_soup):
 domestic_total = find_domestic_total(movie_soup);
 foreign_total = find_foreign_total(movie_soup);
 global_total = find_global_total(movie_soup);
-opening_weekend_total = find_opening_weekend_total(movie_soup);
+#opening_weekend_total = find_opening_weekend_total(movie_soup);
 
 """
 print("Domestic total: ");
@@ -73,7 +79,9 @@ print(foreign_total);
 
 print("Global total: ");
 print(global_total);
-"""
+
+
 
 print("Opening Weekend Total: ");
 print(opening_weekend_total);
+"""

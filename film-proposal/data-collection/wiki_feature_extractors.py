@@ -21,7 +21,7 @@ def dollar_cleaner(dollarField):
 		openingIndex = dollarField.find('(');
 		closingIndex = dollarField.find(')');
 		dollarField = dollarField[0:openingIndex] + '' + dollarField[closingIndex:(len(dollarField))];
-		dollarField = dollarField.replace(' ','').replace(')','')
+		dollarField = dollarField.replace(' ','').replace(')','').replace('to','');
 		poundFind = dollarField.find('£');
 
 		if poundFind == -1:
@@ -67,7 +67,7 @@ def dollar_cleaner(dollarField):
 			else:
 				dollarField = dollarField;
 	
-	except (AttributeError, IndexError):
+	except (AttributeError, IndexError, ValueError):
 		dollarField = "null";
 
 	return dollarField;
@@ -126,10 +126,14 @@ def find_director(filmPageSoup):
 				directorNameATags = row.find_all('a');
 				if not directorNameATags:
 					directorName = row.text.replace(',','').replace('\'','').replace('"','').replace('\u014d','o');
-					directorName = directorName.replace('\n','').replace('Directed by','');
-					directorURL = 'null'
-					directorTuple = {'name': directorName, 'url': directorURL};
-					directorData.append(directorTuple);
+					directorName = directorName.replace('Directed by','').split('\n');
+					for director in directorName:
+						directorURL = 'null'
+						if director == '':
+							pass
+						else:
+							directorTuple = {'name': director, 'url': directorURL};
+							directorData.append(directorTuple);
 				else:
 					for tag in directorNameATags:
 						if tag['href'][0] == "/":			
@@ -153,12 +157,23 @@ def find_actor(filmPageSoup):
 		for row in summaryTableRows:
 			if 'Starring' in row.text:
 				actorNameATags = row.find_all('a');
-				for tag in actorNameATags:
-					if tag['href'][0] == "/":			
-						actorName = tag['title'].replace(',','').replace('\'','').replace('"','');
-						actorURL = wikipediaRoot + tag['href'].replace(',','').replace('\'','').replace('"','');
-						actorTuple = {'name': actorName, 'url': actorURL};
-						actorData.append(actorTuple);
+				if not actorNameATags:
+					actorName = row.text.replace(',','').replace('\'','').replace('"','').replace('\u014d','o').replace('\u016b','u');
+					actorName = actorName.replace('Starring','').replace('(page does not exist)','').split('\n');
+					for actor in actorName:
+						actorURL = 'null'
+						if actor == '':
+							pass
+						else:
+							actorTuple = {'name': actor, 'url': actorURL};
+							actorData.append(actorTuple);
+				else:
+					for tag in actorNameATags:
+						if tag['href'][0] == "/":			
+							actorName = tag['title'].replace(',','').replace('\'','').replace('"','').replace('(page does not exist)','').replace('\u014d','o').replace('\u016b','u');
+							actorURL = wikipediaRoot + tag['href'].replace(',','').replace('\'','').replace('"','');
+							actorTuple = {'name': actorName, 'url': actorURL};
+							actorData.append(actorTuple);
 	except AttributeError:
 		actorTuple = {'name': 'null', 'url': 'null'};
 		actorData.append(actorTuple);
@@ -227,7 +242,7 @@ def find_genre(filmPageSoup):
 		'Drama',
 		'Horror',
 		'Mystery',
-		'Science Fiction',
+#		'Science Fiction',
 		'Silent',
 		'Crime',
 		'Fantasy',
@@ -244,8 +259,8 @@ def find_genre(filmPageSoup):
 		'Musical',
 		'Heist',
 		'Exploitation',
-		'Romantic Comedy',
-		'Epic',
+#		'Romantic Comedy',
+#		'Epic',
 		'Sports',
 		'Parody',
 		'Cult',
@@ -254,7 +269,11 @@ def find_genre(filmPageSoup):
 		'Vampires',
 		'Children',
 		'Adventure',
-		'Sci-fi'
+		'Sci-fi',
+        'Science',
+		'Fiction',
+		'Romantic',
+		'Superhero'
 	]
 
 	filmParagraphs = filmPageSoup.find_all('p');
@@ -263,46 +282,38 @@ def find_genre(filmPageSoup):
 		paragraphText = targetParagraph.text.lower();
 		paragraphText = paragraphText.replace('-',' ');
 		wordList = paragraphText.split('.');
-		targetSentance = wordList[0];
-		targetWords = targetSentance.split(' ');
-
+		targetSentence = wordList[0];
+		targetWords = targetSentence.split(' ');
+		
 		try:
 			for word in targetWords:
 				for genre in filmGenres:
 					genre = genre.lower();
 					if word == genre:
 						genreList.append(word);
+				genreName = " ".join(genreList);
 		except IndexError:
-			genreList.append("null");
+			genreName.append("null");
 	else:
-			genreList.append("null");
+			genreName.append("null");
 
-	return genreList;
+	return genreName;
 
 
 
 """ Code for testing only
+
 filmURLs = [
-'http://en.wikipedia.org/wiki/The_Unbearable_Lightness_of_Being_(film)',
-'http://en.wikipedia.org/wiki/Nim%27s_Island',
-'http://en.wikipedia.org/wiki/Philomena_(film)',
-'http://en.wikipedia.org/wiki/Where_the_Wild_Things_Are_(film)',
-'http://en.wikipedia.org/wiki/Moonlight_Mile_(film)',
-'http://en.wikipedia.org/wiki/Elephant_(2003_film)',
-'http://en.wikipedia.org/wiki/Kissing_Jessica_Stein',
-'http://en.wikipedia.org/wiki/Ruby_in_Paradise',
-'http://en.wikipedia.org/wiki/Duckweed_(film)',
-'http://en.wikipedia.org/wiki/Love_Is_All_You_Need',
-'http://en.wikipedia.org/wiki/Surveillance_(2008_film)',
-'http://en.wikipedia.org/wiki/Any_Given_Sunday',
-'http://en.wikipedia.org/wiki/Hope_and_Glory_(film)',
-'http://en.wikipedia.org/wiki/Dirty_Work_(1998_film)',
-'http://en.wikipedia.org/wiki/Next_Day_Air',
-'http://en.wikipedia.org/wiki/8:_The_Mormon_Proposition',
-'http://en.wikipedia.org/wiki/The_Deep_End_(film)',
-'http://en.wikipedia.org/wiki/What%27s_Eating_Gilbert_Grape',
-'http://en.wikipedia.org/wiki/Rubber_(2010_film)',
-'http://en.wikipedia.org/wiki/A_Lady_Without_Passport'
+'http://en.wikipedia.org/wiki/Cannonball_Run_(film)',
+'http://en.wikipedia.org/wiki/Cannonball_Run_II',
+'http://en.wikipedia.org/wiki/Can%27t_Buy_Me_Love_(film)',
+'http://en.wikipedia.org/wiki/Can%27t_Hardly_Wait',
+'http://en.wikipedia.org/wiki/Can%27t_Stop_the_Music',
+'http://en.wikipedia.org/wiki/Cape_Nostalgia',
+'http://en.wikipedia.org/wiki/Capitalism:_A_Love_Story',
+'http://en.wikipedia.org/wiki/Capone_(film)',
+'http://en.wikipedia.org/wiki/Capote_(film)',
+'http://en.wikipedia.org/wiki/Capricorn_One'
 ]
 
 for filmURL in filmURLs:
@@ -310,6 +321,29 @@ for filmURL in filmURLs:
 	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
 	filmBudget = find_budget(filmPageSoup);
 	filmRevenue = find_revenue(filmPageSoup);
+	directorData = find_director(filmPageSoup);
+	distributionCompanyData = find_distribution_company(filmPageSoup);
+	actorData = find_actor(filmPageSoup);
+	releaseDate = find_release_date(filmPageSoup);
+	genreName = find_genre(filmPageSoup);
+
+#	for directorTuple in directorData:
+#		print("Directed by: ");
+#		print(directorTuple);
+
+#	for actorTuple in actorData:
+#		print("Starring: ");
+#		print(actorTuple); 
+
+	#for genre in genreList:
+	#	print("Genre: ");
+	#	print(genre);
+	print("Genre: ");
+	print(genreName);
+
+	print("Film Budget: ");
+	print(filmBudget);
+
 	print("Film Revenue: ");
 	print(filmRevenue);
 """
