@@ -291,13 +291,12 @@ def find_genre(filmPageSoup):
 					genre = genre.lower();
 					if word == genre:
 						genreList.append(word);
-				genreName = " ".join(genreList);
 		except IndexError:
-			genreName.append("null");
+			genreList.append("null");
 	else:
-			genreName.append("null");
+			genreList.append("null");
 
-	return genreName;
+	return genreList;
 
 
 
@@ -319,13 +318,13 @@ filmURLs = [
 for filmURL in filmURLs:
 	
 	filmPageSoup = BeautifulSoup(urllib.request.urlopen(filmURL));
-	filmBudget = find_budget(filmPageSoup);
-	filmRevenue = find_revenue(filmPageSoup);
-	directorData = find_director(filmPageSoup);
-	distributionCompanyData = find_distribution_company(filmPageSoup);
-	actorData = find_actor(filmPageSoup);
-	releaseDate = find_release_date(filmPageSoup);
-	genreName = find_genre(filmPageSoup);
+#	filmBudget = find_budget(filmPageSoup);
+#	filmRevenue = find_revenue(filmPageSoup);
+#	directorData = find_director(filmPageSoup);
+#	distributionCompanyData = find_distribution_company(filmPageSoup);
+#	actorData = find_actor(filmPageSoup);
+#	releaseDate = find_release_date(filmPageSoup);
+	genreList = find_genre(filmPageSoup);
 
 #	for directorTuple in directorData:
 #		print("Directed by: ");
@@ -339,11 +338,11 @@ for filmURL in filmURLs:
 	#	print("Genre: ");
 	#	print(genre);
 	print("Genre: ");
-	print(genreName);
+	print(genreList);
 
-	print("Film Budget: ");
-	print(filmBudget);
+#	print("Film Budget: ");
+#	print(filmBudget);
 
-	print("Film Revenue: ");
-	print(filmRevenue);
+#	print("Film Revenue: ");
+#	print(filmRevenue);
 """
