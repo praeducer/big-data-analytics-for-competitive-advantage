@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 #TODO: build function to extract list of movie titles/movie_ids from Alphabetical index
 #TODO: update MPAA rating to - count find as len(row list)-1 or -2 in order to ensure that it pulls MPAA rating field correctly
 
-movie_ID = 'piratesofthecaribbean4.htm';
+movie_ID = 'hobbit3.htm';
 base_URL = 'http://www.boxofficemojo.com/movies';
 movie_URL = ('%s/?id=%s' % (base_URL,movie_ID));
 movie_soup = BeautifulSoup(urllib.request.urlopen(movie_URL));
@@ -85,9 +85,14 @@ def find_number_of_theaters(movie_soup):
 
 def find_mpaa_rating(movie_soup):
 	center_table = movie_soup.findChildren('center')[0];
-	center_table_data = center_table.findChildren('td')[5];
-	center_table_data = center_table_data.find('b');
-	center_table_data = center_table_data.text
+	center_table_data = center_table.findChildren('tr');#[5];
+	#center_table_data = center_table_data[len(center_table_data)-2];
+	for row in center_table_data:
+		if 'MPAA' in row.text:
+			center_table_data = row.find('b');
+			center_table_data = center_table_data.text;
+#	center_table_data = center_table_data.find('b');
+#	center_table_data = center_table_data.text
 	return center_table_data;
 
 
