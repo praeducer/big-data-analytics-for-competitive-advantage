@@ -10,12 +10,69 @@ import wikipedia
 from bs4 import BeautifulSoup
 
 #TODO: build function to extract list of movie titles/movie_ids from Alphabetical index
-#TODO: update MPAA rating to - count find as len(row list)-1 or -2 in order to ensure that it pulls MPAA rating field correctly
-
 movie_ID = 'hobbit3.htm';
 base_URL = 'http://www.boxofficemojo.com/movies';
 movie_URL = ('%s/?id=%s' % (base_URL,movie_ID));
 movie_soup = BeautifulSoup(urllib.request.urlopen(movie_URL));
+base_index_url = 'http://www.boxofficemojo.com/movies/alphabetical.htm?';
+initial_url = 'http://www.boxofficemojo.com/movies/'
+
+def parse_alphabetical_index(initial_url):
+	index_url_list = [];
+	initial_url_soup = BeautifulSoup(urllib.request.urlopen(initial_url));
+	all_tables = initial_url_soup.find_all('table');
+	index_table	= all_tables[1];
+	index_table_rows = index_table.find_all('tr');
+	target_row = index_table_rows[1];
+	target_columns = target_row.find_all('td');
+	for column in target_columns:
+		index_url = column.find('a').get('href');
+		final_index_url = initial_url + index_url;
+		index_url_list.append(final_index_url);
+	return index_url_list;
+
+def parse_index_pages(index_url_list):
+	secondary_index_list = [];
+	index_url_base = 'http://www.boxofficemojo.com';
+	for item in index_url_list:
+		secondary_index_list.append(item);
+		primary_index_soup = BeautifulSoup(urllib.request.urlopen(item));
+		target_table = primary_index_soup.find('div',{'class':'alpha-nav-holder'});
+		target_table_tags = target_table.find_all('a');
+		if not target_table_tags:
+			secondary_index_url = item;
+			secondary_index_list.append(secondary_index_url);
+		else:
+			for tag in target_table_tags:
+				secondary_index_url = tag.get('href');
+				secondary_index_url = index_url_base + secondary_index_url;
+				secondary_index_list.append(secondary_index_url);
+	return secondary_index_list;
+
+#TODO: Finish building final list of film URL's to pass into extractor functions
+
+def build_film_page_list(secondary_index_list):
+	film_url_list = [];
+#	for item in secondary_index_list:
+	item = 'http://www.boxofficemojo.com/movies/alphabetical.htm?letter=A&p=.htm'
+	item_list = item.split('&');
+	if item_list[1] == 'p=.htm':
+		secondary_index_soup = BeautifulSoup(urllib.request.urlopen(item));
+		page_tables = secondary_index_soup.find_all('table');
+
+#PROBLEM: Strange issue where movie list table does not populate in the [3] table, the below setup should work correctly but it doesn't find any movies data.
+
+		for table in page_tables:
+			print (str(table).encode('ascii','ignore'));
+
+		#target_table = page_tables[3];
+		#table_rows = target_table.find_all('tr');
+		#for row in table_rows:
+			#table_columns = row.find_all('td');
+		#	target_column = table_columns[0];
+			#film_url = target_column.find('a')
+	else:
+		print("wrong");
 
 def find_domestic_total(movie_soup):
 	revenue_table = movie_soup.find('div', {'class':'mp_box_content'});
@@ -95,14 +152,20 @@ def find_mpaa_rating(movie_soup):
 #	center_table_data = center_table_data.text
 	return center_table_data;
 
-
+index_url_list = parse_alphabetical_index(initial_url);
 domestic_total = find_domestic_total(movie_soup);
 foreign_total = find_foreign_total(movie_soup);
 global_total = find_global_total(movie_soup);
 opening_weekend_total = find_opening_weekend_total(movie_soup);
 number_of_theaters = find_number_of_theaters(movie_soup);
 mpaa_rating = find_mpaa_rating(movie_soup);
+secondary_index_list = parse_index_pages(index_url_list);
+film_url_list = build_film_page_list(secondary_index_list);
 
+
+"""
+for item in secondary_index_list:
+	print(item);
 
 print("Domestic total: ");
 print(domestic_total);
@@ -121,3 +184,4 @@ print(number_of_theaters);
 
 print("MPAA Rating: ");
 print(mpaa_rating);
+"""
