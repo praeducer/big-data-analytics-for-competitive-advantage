@@ -9,7 +9,8 @@ import re
 import wikipedia
 from bs4 import BeautifulSoup
 
-#TODO: build function to extract list of movie titles/movie_ids from Alphabetical index
+#TODO: Add movie name and release date functions
+
 movie_ID = 'hobbit3.htm';
 base_URL = 'http://www.boxofficemojo.com/movies';
 movie_URL = ('%s/?id=%s' % (base_URL,movie_ID));
@@ -49,30 +50,19 @@ def parse_index_pages(index_url_list):
 				secondary_index_list.append(secondary_index_url);
 	return secondary_index_list;
 
-#TODO: Finish building final list of film URL's to pass into extractor functions
-
 def build_film_page_list(secondary_index_list):
 	film_url_list = [];
+
+#TODO: Add for loop when confident in final processing 
 #	for item in secondary_index_list:
 	item = 'http://www.boxofficemojo.com/movies/alphabetical.htm?letter=A&p=.htm'
-	item_list = item.split('&');
-	if item_list[1] == 'p=.htm':
-		secondary_index_soup = BeautifulSoup(urllib.request.urlopen(item));
-		page_tables = secondary_index_soup.find_all('table');
-
-#PROBLEM: Strange issue where movie list table does not populate in the [3] table, the below setup should work correctly but it doesn't find any movies data.
-
-		for table in page_tables:
-			print (str(table).encode('ascii','ignore'));
-
-		#target_table = page_tables[3];
-		#table_rows = target_table.find_all('tr');
-		#for row in table_rows:
-			#table_columns = row.find_all('td');
-		#	target_column = table_columns[0];
-			#film_url = target_column.find('a')
-	else:
-		print("wrong");
+	secondary_index_soup = BeautifulSoup(urllib.request.urlopen(item));
+	page_urls = secondary_index_soup.find_all('a');
+	for url in page_urls:
+		url = url.get('href');
+		url_split = url.split('=');
+		if url_split[0] == '/movies/?id':
+			print(url);
 
 def find_domestic_total(movie_soup):
 	revenue_table = movie_soup.find('div', {'class':'mp_box_content'});
