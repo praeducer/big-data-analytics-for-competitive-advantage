@@ -5,10 +5,12 @@
 # author: Paul Prae
 # since: 3/3/2015
 # tested with Python 3.3 on CentOS 7 and Windows 8.1
+# Note: May want to comment out prints when running on Hadoop.
 # TODO: Unit Test all strange cases. Will help this make more sense to others too.
 # TODO: Optimize this. It can be slow over many records.
-# TODO: 'Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning'
-# TODO: Make confidence level more scientific. 
+#	'Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning'
+# TODO: Make confidence level more scientific. Basically, use solid reasoning behind bonuses.
+# TODO: Abstract this away so it can be used to find articles about any topic given any kind of row by column input.
 
 import sys
 import csv
@@ -24,7 +26,6 @@ def bestURLSearch(title, year):
 	bestURLs = []
 	queries = []
 
-
 	# Start with two queries: one with (film) and one without. Run both and see which fuzzy score is better.
 	titleWithFilm = title + ' (film)'
 	# get wikipedia's best guess for both. appends (url, score). if nothing was found ('N/A', 0)
@@ -34,8 +35,8 @@ def bestURLSearch(title, year):
 	queries.append(titleWithFilm)
 
 	# Lazy optimization
-	# NOTE: Don't do this unless you need to reduce processing time.
-	# After some testing, this means about a perfect match
+	# After some testing, this means about a perfect match.
+	# We at least want 100 (exact title match in summary or page title) + the word 'film' and the film's release year in the summary bonuses, all divided by total possible points.
 	desiredScore = 0.875
 	currentBestURL, currentBestScore = max(bestURLs, key=operator.itemgetter(1))
 	if currentBestScore >= desiredScore:
@@ -54,7 +55,7 @@ def bestURLSearch(title, year):
 		queries.append(titleWithFilmBestOption)
 
 	# there are some cases where the option has a film version
-	if titleBestOption:
+	if titleBestOption and 'film' not in titleBestOption:
 		titleBestOptionWithFilm = titleBestOption + ' (film)'
 		if titleBestOptionWithFilm not in queries:
 			bestURLs.append(findPageURL(titleBestOptionWithFilm, title, year))
@@ -65,7 +66,6 @@ def bestURLSearch(title, year):
 
 # returns the best query to search
 def findBestOption(query, title):
-	safePrint('\tFinding best option for: ' + query)
 	searchResults = wikipedia.search(query)
 	if searchResults:
 		bestMatch = difflib.get_close_matches(title, searchResults, 1)
@@ -76,6 +76,7 @@ def findBestOption(query, title):
 			for option in searchResults:
 				if 'film' in option or title in option:
 					return option
+			# TODO: Does this ever return anything different than findPageURL?
 			# if we found nothing at all similar in the options, trust wikipedia search and return the first result.
 			return searchResults[0]
 	return None
@@ -147,8 +148,20 @@ def safePrint(message):
 	except UnicodeEncodeError:
 		print('\tsafePrint: <UnicodeEncodeError during print. Search is fine.>')
 
+def mapper(line):
+	title = line[2].strip('\n\r')
+	year = line[3]
+	# Highest scoring page found is the one we use the URL from. Save URL and score. N/A only if it was impossible to find any page at all.
+	url = bestURLSearch(title, year)
+	if not url:
+		print("\t! - No URL found")
+		url = ('N/A', 0)
+	print('\tresult-> ' + url[0] + ", " + str(url[1]))
+	line.extend(url)
+	return line
+
 if __name__=="__main__":
-	outputFilename = './data/omdb/test/omdb_movies_wikipedia_urls_tiny_sample.csv'
+	outputFilename = './data/omdb/test/omdb_movies_wikipedia_urls_tiny_sample_map_test.csv'
 	filmDataWriter = csv.writer(open(outputFilename,'w', encoding="utf8", newline=''), delimiter='\t')
 	inputFilename = './data/omdb/test/omdbMovies_tiny_sample.txt'
 	filmDataReader = csv.reader(open(inputFilename, encoding="utf8"),delimiter='\t')
@@ -159,13 +172,5 @@ if __name__=="__main__":
 	for line in filmDataReader:
 		lineCount += 1
 		print(' ~ ' + str(lineCount) + ' ~ ')
-		title = line[2].strip('\n\r')
-		year = line[3]
-		# Highest scoring page found is the one we use the URL from. Save URL and score. N/A only if it was impossible to find any page at all.
-		url = bestURLSearch(title, year)
-		if not url:
-			print("\t! - No URL found")
-			url = ('N/A', 0)
-		print('\tresult-> ' + url[0] + ", " + str(url[1]))
-		line.extend(url)
-		filmDataWriter.writerow(line)
+		extendedLine = mapper(line)
+		filmDataWriter.writerow(extendedLine)
