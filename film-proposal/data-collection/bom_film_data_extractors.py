@@ -7,6 +7,7 @@ import os
 import sys
 import re
 import wikipedia
+import csv
 from bs4 import BeautifulSoup
 
 #TODO: Add movie name and release date functions
@@ -100,6 +101,16 @@ global_total = find_global_total(movie_soup);
 opening_weekend_total = find_opening_weekend_total(movie_soup);
 number_of_theaters = find_number_of_theaters(movie_soup);
 mpaa_rating = find_mpaa_rating(movie_soup);
+
+
+filename = './data/bom_film_urls.csv';
+bom_film_urls = [];
+
+film_url_reader = csv.reader(open(filename, encoding="utf8"),delimiter='\t')
+for row in film_url_reader:
+	bom_film_urls.append(row);
+
+print(bom_film_urls);
 
 """
 print("Domestic total: ");

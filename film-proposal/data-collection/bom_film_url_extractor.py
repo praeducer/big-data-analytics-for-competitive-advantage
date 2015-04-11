@@ -1,3 +1,8 @@
+# description: Parses the primary and secondary alphabetical index pages on Box Office Mojo in order to construct a complete list of individual film urls.
+# authors: Daniel Joensen
+# since: 4/09/2015
+# tested with Python 3.4.2 on Windows 7 Ultimate 64 bit
+
 import urllib
 import os
 import sys
