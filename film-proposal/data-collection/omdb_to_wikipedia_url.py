@@ -160,17 +160,36 @@ def mapper(line):
 	line.extend(url)
 	return line
 
-if __name__=="__main__":
-	outputFilename = './data/omdb/test/omdb_movies_wikipedia_urls_tiny_sample_map_test.csv'
-	filmDataWriter = csv.writer(open(outputFilename,'w', encoding="utf8", newline=''), delimiter='\t')
-	inputFilename = './data/omdb/test/omdbMovies_tiny_sample.txt'
+def reducer(lineA, lineB, outputFilename='./data/omdb/test/omdb_movies_wikipedia_urls.csv'):
+	filmDataWriter = csv.writer(open(outputFilename,'a', encoding="utf8", newline=''), delimiter='\t')
+	filmDataWriter.writerow(lineA)
+	if lineB:
+		filmDataWriter.writerow(lineB)
+
+# Faking map and reduce flow
+def loopLocal(inputFilename, outputFilename):
 	filmDataReader = csv.reader(open(inputFilename, encoding="utf8"),delimiter='\t')
+	open(outputFilename,'w', encoding="utf8", newline='')
 	filmDataReader.__next__()
-	urls = []
 	lineCount = 0
 
 	for line in filmDataReader:
 		lineCount += 1
 		print(' ~ ' + str(lineCount) + ' ~ ')
-		extendedLine = mapper(line)
-		filmDataWriter.writerow(extendedLine)
+		extendedLineA = mapper(line)
+
+		try:
+			line = filmDataReader.__next__()
+			lineCount += 1
+			print(' ~ ' + str(lineCount) + ' ~ ')
+			extendedLineB = mapper(line)
+			reducer(extendedLineA, extendedLineB, outputFilename)
+
+		except StopIteration:
+			reducer(extendedLineA, None, outputFilename)
+
+
+if __name__=="__main__":
+	outputFilename = './data/omdb/test/omdb_movies_wikipedia_urls_tiny_sample_map_test.csv'
+	inputFilename = './data/omdb/test/omdbMovies_tiny_sample.txt'
+	loopLocal(inputFilename, outputFilename)
