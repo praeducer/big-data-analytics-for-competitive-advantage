@@ -106,11 +106,12 @@ mpaa_rating = find_mpaa_rating(movie_soup);
 filename = './data/bom_film_urls.csv';
 bom_film_urls = [];
 
-film_url_reader = csv.reader(open(filename, encoding="utf8"),delimiter='\t')
+film_url_reader = csv.reader(open(filename));
 for row in film_url_reader:
 	bom_film_urls.append(row);
 
-print(bom_film_urls);
+for item in bom_film_urls:
+	print (item);
 
 """
 print("Domestic total: ");

@@ -63,7 +63,7 @@ if __name__=="__main__":
 
 	filename = './data/bom_film_urls.csv'
 	outputFile = open(filename,'w');
-	outputFile.write('url\n');
+#	outputFile.write('url\n');
 
 	index_url_list = parse_alphabetical_index(initial_url);
 	secondary_index_list = parse_index_pages(index_url_list);
