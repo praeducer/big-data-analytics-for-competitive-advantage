@@ -19,8 +19,11 @@ def download_film_reviews(filmDataFilename):
 		count += 1
 		title = wikiFilmData[0] if len(wikiFilmData) else None
 		if title:
-			title = title.replace("'", "")
+			title = title.replace("'", "").replace("(film)", "")
 			year = wikiFilmData[3] if wikiFilmData[3] else None
+			if year and str(year) in title:
+				title = title.replace(str(year), "")
+			title = title.replace("  ", " ").replace(")", "").replace("(", "")
 			try:
 				print(str(count) + " - " + title + " " + year)
 				rottenFilmData = query_film(title, year)
