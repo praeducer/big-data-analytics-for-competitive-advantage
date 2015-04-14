@@ -106,6 +106,7 @@ def scorePage(page, title, year):
 	bonuses = []
 	bonusToScore = {'filmInTitle': defaultBonus, 'filmInSummary': 20, 'yearInTitle': defaultBonus, 'yearInSummary': 20}
 	pageScore = 0
+	# TODO: consider how (film) or year in the page.title could negatively affect fuzz.ratio. Consider replacing '(film)' with ''.
 	pageScore = max( fuzz.partial_ratio(title, page.summary), fuzz.ratio(title, page.title))
 
 	if 'film' in page.title:
