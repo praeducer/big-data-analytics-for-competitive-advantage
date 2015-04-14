@@ -20,8 +20,9 @@ def find_movie_name(movie_soup):
 	target_row = table_rows[0];
 	target_columns = target_row.find_all('td', {'align':'center'});
 	target_column = target_columns[1];
-	target_column = target_column.find('b')
+	target_column = target_column.find('b');
 	movie_title = target_column.text;
+	movie_title = movie_title.replace(',','');
 	return movie_title;
 
 def find_domestic_total(movie_soup):
@@ -34,7 +35,7 @@ def find_domestic_total(movie_soup):
 				domestic_total = row.text;
 				domestic_total = domestic_total.split()[1];
 				domestic_total = domestic_total.replace('$','').replace(',','');
-	except IndexError:
+	except (IndexError, AttributeError):
 		domestic_total = 'null';
 	return domestic_total;
 
@@ -48,8 +49,8 @@ def find_foreign_total(movie_soup):
 				foreign_total = row.text;
 				foreign_total = foreign_total.split()[2];
 				foreign_total = foreign_total.replace('$','').replace(',','');
-	except IndexError:
-		domestic_total = 'null';
+	except (IndexError, AttributeError):
+		foreign_total = 'null';
 	return foreign_total;
 
 def find_global_total(movie_soup):
@@ -62,8 +63,8 @@ def find_global_total(movie_soup):
 				global_total = row.text;
 				global_total = global_total.split()[2];
 				global_total = global_total.replace('$','').replace(',','');
-	except IndexError:
-		domestic_total = 'null';
+	except (IndexError, AttributeError):
+		global_total = 'null';
 	return global_total;
 
 def find_opening_weekend_total(movie_soup):
@@ -83,7 +84,7 @@ def find_opening_weekend_total(movie_soup):
 						if '$' in item:
 							opening_weekend_total = item
 							opening_weekend_total = opening_weekend_total.replace('$','').replace(',','');
-	except IndexError:
+	except (IndexError, AttributeError):
 		opening_weekend_total = 'null';
 	return opening_weekend_total;
 
@@ -101,7 +102,7 @@ def find_number_of_theaters(movie_soup):
 					row_list = row.text.split();
 					number_of_theaters = row_list[2];
 					number_of_theaters = number_of_theaters.replace(',','');
-	except IndexError:
+	except (IndexError, AttributeError):
 		number_of_theaters = 'null';
 	return number_of_theaters;
 
@@ -161,92 +162,51 @@ def find_run_time(movie_soup):
 
 	return run_time;
 
-film_url_list = [
-'http://www.boxofficemojo.com/movies/?id=feast.htm',
-'http://www.boxofficemojo.com/movies/?id=findingnemo.htm',
-'http://www.boxofficemojo.com/movies/?id=fleshandblood.htm',
-'http://www.boxofficemojo.com/movies/?id=forthemoment.htm',
-'http://www.boxofficemojo.com/movies/?id=fraude.htm',
-'http://www.boxofficemojo.com/movies/?id=front.htm',
-'http://www.boxofficemojo.com/movies/?id=garden09.htm',
-'http://www.boxofficemojo.com/movies/?id=ghosttown.htm',
-'http://www.boxofficemojo.com/movies/?id=glenorglenda53.htm',
-'http://www.boxofficemojo.com/movies/?id=gonegirl.htm',
-'http://www.boxofficemojo.com/movies/?id=graduate.htm',
-'http://www.boxofficemojo.com/movies/?id=greetingsfromtimbuckley.htm',
-'http://www.boxofficemojo.com/movies/?id=haikutunnel.htm',
-'http://www.boxofficemojo.com/movies/?id=happytimes.htm',
-'http://www.boxofficemojo.com/movies/?id=hayride2.htm',
-'http://www.boxofficemojo.com/movies/?id=hellbound.htm',
-'http://www.boxofficemojo.com/movies/?id=highheelsandlowlifes.htm',
-'http://www.boxofficemojo.com/movies/?id=hollywoodland.htm',
-'http://www.boxofficemojo.com/movies/?id=hotspot.htm',
-'http://www.boxofficemojo.com/movies/?id=surviveaplague.htm',
-'http://www.boxofficemojo.com/movies/?id=icouldneverbeyourwoman.htm',
-'http://www.boxofficemojo.com/movies/?id=icemancometh.htm',
-'http://www.boxofficemojo.com/movies/?id=inmyfathersden.htm',
-'http://www.boxofficemojo.com/movies/?id=inlandempire.htm',
-'http://www.boxofficemojo.com/movies/?id=invisiblewoman.htm',
-'http://www.boxofficemojo.com/movies/?id=oneshot.htm',
-'http://www.boxofficemojo.com/movies/?id=jewinthelotus.htm',
-'http://www.boxofficemojo.com/movies/?id=ghosttown.htm',
-'http://www.boxofficemojo.com/movies/?id=glenorglenda53.htm',
-'http://www.boxofficemojo.com/movies/?id=gonegirl.htm',
-'http://www.boxofficemojo.com/movies/?id=graduate.htm',
-'http://www.boxofficemojo.com/movies/?id=greetingsfromtimbuckley.htm',
-'http://www.boxofficemojo.com/movies/?id=haikutunnel.htm',
-'http://www.boxofficemojo.com/movies/?id=happytimes.htm',
-'http://www.boxofficemojo.com/movies/?id=hayride2.htm',
-'http://www.boxofficemojo.com/movies/?id=hellbound.htm',
-'http://www.boxofficemojo.com/movies/?id=highheelsandlowlifes.htm',
-'http://www.boxofficemojo.com/movies/?id=hollywoodland.htm',
-'http://www.boxofficemojo.com/movies/?id=hotspot.htm',
-'http://www.boxofficemojo.com/movies/?id=surviveaplague.htm',
-'http://www.boxofficemojo.com/movies/?id=icouldneverbeyourwoman.htm',
-'http://www.boxofficemojo.com/movies/?id=icemancometh.htm',
-'http://www.boxofficemojo.com/movies/?id=inmyfathersden.htm',
-'http://www.boxofficemojo.com/movies/?id=inlandempire.htm',
-'http://www.boxofficemojo.com/movies/?id=invisiblewoman.htm',
-'http://www.boxofficemojo.com/movies/?id=oneshot.htm',
-'http://www.boxofficemojo.com/movies/?id=jewinthelotus.htm'
-]
-
-"""
-
-#NOTE: Left in for testing purposes.
-
-for film_url in film_url_list:
-	movie_soup = BeautifulSoup(urllib.request.urlopen(film_url));	
-	movie_name = find_movie_name(movie_soup);
-	run_time = find_run_time(movie_soup);
-	release_date = find_release_date(movie_soup);
-	mpaa_rating = find_mpaa_rating(movie_soup);	
-	opening_weekend_total = find_opening_weekend_total(movie_soup);
-	number_of_theaters = find_number_of_theaters(movie_soup);
-	domestic_total = find_domestic_total(movie_soup);
-	foreign_total = find_foreign_total(movie_soup);
-	global_total = find_global_total(movie_soup);
-
-	print("Movie Name: ");
-	print(movie_name);
-
-	print("Number of Theaters:");
-	print(number_of_theaters);
-
-#	print("Release Date:");
-#	print(release_date);
-"""
-
-"""
-filename = './data/bom_film_urls.csv';
-bom_film_urls = [];
+filename = 'C:/Users/Public/dev/bom_film_urls_edited.csv';
+film_url_list = [];
 film_url_reader = csv.reader(open(filename));
 for row in film_url_reader:
-	film_urls.append(row);
+	for item in row:
+		film_url_list.append(item);
 
-for item in film_urls:
-	print (item);
+if __name__=="__main__":
+
+	filename = './data/bom_film_data.csv'
+	outputFile = open(filename,'w');
+	outputFile.write('Movie name, URL, Release Date, MPAA Rating, Run Time,  Opening Weekend Total, Number of Theaters, Domestic Total Sales, Foreign Total Sales, Global Total Sales\n');
+	count = 0;
+	for film_url in film_url_list:
+		count += 1;
+		print(str(count) + ":" + film_url);
+		try:
+			movie_soup = BeautifulSoup(urllib.request.urlopen(film_url));	
+			movie_name = find_movie_name(movie_soup);
+			release_date = find_release_date(movie_soup);
+			mpaa_rating = find_mpaa_rating(movie_soup);	
+			run_time = find_run_time(movie_soup);
+			opening_weekend_total = find_opening_weekend_total(movie_soup);
+			number_of_theaters = find_number_of_theaters(movie_soup);
+			domestic_total = find_domestic_total(movie_soup);
+			foreign_total = find_foreign_total(movie_soup);
+			global_total = find_global_total(movie_soup);
+		except urllib.error.HTTPError:
+			pass
+		outputFile.write( movie_name + ',' + film_url + ',' + release_date + ',' + mpaa_rating + ',' + run_time + ',' + opening_weekend_total + ',' + number_of_theaters + ',' + domestic_total + ',' + foreign_total + ',' + global_total + '\n');
+
+	outputFile.close();
+
 """
+#was trying to use for local files, ran into issues with website capture
+
+filename = 'C:/Users/Public/dev/bom_film_urls.csv';
+file_path_list = [];
+film_url_reader = csv.reader(open(filename));
+for row in film_url_reader:
+	for item in row:
+		split_url = item.split('=');
+		film_id = split_url[len(split_url) - 1];
+		film_file_path = 'C:/Users/Public/dev/film_page_storage/' + film_id;
+		file_path_list.append(film_file_path);
 
 if __name__=="__main__":
 
@@ -254,18 +214,19 @@ if __name__=="__main__":
 	outputFile = open(filename,'w');
 	outputFile.write('Movie name, URL, Release Date, MPAA Rating, Run Time,  Opening Weekend Total, Number of Theaters, Domestic Total Sales, Foreign Total Sales, Global Total Sales\n');
 
-	for film_url in film_url_list:
-		movie_soup = BeautifulSoup(urllib.request.urlopen(film_url));	
-		movie_name = find_movie_name(movie_soup);
-		release_date = find_release_date(movie_soup);
-		mpaa_rating = find_mpaa_rating(movie_soup);	
-		run_time = find_run_time(movie_soup);
-		opening_weekend_total = find_opening_weekend_total(movie_soup);
-		number_of_theaters = find_number_of_theaters(movie_soup);
-		domestic_total = find_domestic_total(movie_soup);
-		foreign_total = find_foreign_total(movie_soup);
-		global_total = find_global_total(movie_soup);
+	film_file = open('C:/Users/Public/dev/film_page_storage/2fast2furious.htm', encoding="utf8");
+	movie_soup = BeautifulSoup(film_file.read());	
+	movie_name = find_movie_name(movie_soup);
+	release_date = find_release_date(movie_soup);
+	mpaa_rating = find_mpaa_rating(movie_soup);	
+	run_time = find_run_time(movie_soup);
+	opening_weekend_total = find_opening_weekend_total(movie_soup);
+	number_of_theaters = find_number_of_theaters(movie_soup);
+	domestic_total = find_domestic_total(movie_soup);
+	foreign_total = find_foreign_total(movie_soup);
+	global_total = find_global_total(movie_soup);
 
-		outputFile.write( movie_name + ',' + film_url + ',' + release_date + ',' + mpaa_rating + ',' + run_time + ',' + opening_weekend_total + ',' + number_of_theaters + ',' + domestic_total + ',' + foreign_total + ',' + global_total + '\n');
+	outputFile.write( movie_name + ',' + film_url + ',' + release_date + ',' + mpaa_rating + ',' + run_time + ',' + opening_weekend_total + ',' + number_of_theaters + ',' + domestic_total + ',' + foreign_total + ',' + global_total + '\n');
 
 	outputFile.close();
+"""
