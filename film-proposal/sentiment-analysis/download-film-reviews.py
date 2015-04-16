@@ -1,9 +1,10 @@
+# TODO: Convince Rotten Tomatoes to let me use their API for less than $30,000 a year.
+# TODO: FINISH
 # description: pull film reviews from rotten tomatoes. store them locally.
 # input: list of film titles and release years e.g. https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/film-proposal/data-collection/data/film_data_part_2.csv
 # output: a csv of the film title, film year, rotten tomatoes ID, and a string of all review quotes.
 # author: Paul Prae (@praeducer)
 # since: 4/12/2015
-# TODO: test
 
 import sys
 import csv
