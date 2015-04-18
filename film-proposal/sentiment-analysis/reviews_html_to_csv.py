@@ -6,6 +6,16 @@
 # data set: Polarity dataset (Pool of 27886 unprocessed html files). http://www.cs.cornell.edu/people/pabo/movie-review-data/polarity_html.zip
 # TODO: Figure out regex for year
 # TODO: Pull out review text
+# TODO: Consider extracing out meta data. e.g.:
+'''
+<PRE>==========
+X-RAMR-ID: 29870
+X-Language: en
+X-RT-ReviewID: 256672
+X-RT-TitleID: 1110296
+X-RT-SourceID: 595
+X-RT-AuthorID: 1146</PRE>
+'''
 
 import os
 import re
@@ -14,6 +24,7 @@ from bs4 import BeautifulSoup
 import csv
 import ntpath
 
+# TODO: break into find_year, find_title, find_review etc.
 def mapper(fullFilmFilePath):
 	try:
 		filmPage = open(fullFilmFilePath, encoding="utf8")
@@ -31,7 +42,8 @@ def mapper(fullFilmFilePath):
 	filmFileID = filmFileParts[0]
 	filmExtension = filmFileParts[1]
 
-	if filmExtension == '.html':
+	# TODO: Do this first thing, before creating soup object.
+	if filmExtension == '.html' and filmPageSoup:
 		titleTagContents = filmPageSoup.find('h1').find('a').string # alternate: filmPageSoup.title.string
 		inParenRegex = re.compile('\([0-9][0-9][0-9][0-9]\)')
 		year = re.search(inParenRegex, titleTagContents)
@@ -40,7 +52,23 @@ def mapper(fullFilmFilePath):
 			year = ''.join(filter(lambda char: char.isdigit(), year))
 		title = titleTagContents.split('(', 1)[0]
 		title = title.replace(',','').replace('\'','').replace('"','').rstrip()
-		return [filmFileID, title, year]#, review]
+
+		review = ""
+		filmPagePTags = filmPageSoup.findAll('p')
+		totalPTagsLeft = len(filmPagePTags)
+		# Concat the strings from every P tags except the last two which 
+		for pTag in filmPagePTags:
+			review += pTag.string
+			totalPTagsLeft -= 1
+			# last two appear to be unnecessary meta data
+			if totalPTagsLeft < 3:
+				break
+
+		# TODO: Make sure I replaced everything I need to and did not do anything redundant.
+		# TODO: Replace all white space with a space.
+		review = review.replace(',','').replace('\'','').replace('"','').replace('\n',' ').rstrip().lstrip()
+
+		return [filmFileID, title, year, review]
 	else:
 		return None
 
@@ -59,7 +87,7 @@ def loop_local(inputDirectory, outputFile):
 		if filmRow:
 			filmWriter.writerow(filmRow)
 			print(filmRow)
-		if count == 10:
+		if count == 3:
 			sys.exit(0)
 
 
