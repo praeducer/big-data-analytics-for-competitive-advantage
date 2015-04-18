@@ -27,18 +27,22 @@ def mapper(fullFilmFilePath):
 		print("\tUnicodeDecodeError!")
 		return None
 	filmFileName = ntpath.basename(fullFilmFilePath)
-	filmFileID = os.path.splitext(filmFileName)[0]
+	filmFileParts = os.path.splitext(filmFileName)
+	filmFileID = filmFileParts[0]
+	filmExtension = filmFileParts[1]
 
-	titleTagContents = filmPageSoup.find('h1').find('a').string # alternate: filmPageSoup.title.string
-	# year = ''.join(filter(lambda char: char.isdigit(), titleTagContents)); # won't work for title with digits
-	inParenRegex = re.compile('(?<=\().+?(?=\))') # wut: ('\(([^\)]+)\)')
-	year = inParenRegex.match(titleTagContents)
-	if year:
-		year = year.group()
-	title = titleTagContents.split('(', 1)[0]
-	title = title.replace(',','').replace('\'','').replace('"','').rstrip()
-
-	return [filmFileID, title, year]#, review]
+	if filmExtension == '.html':
+		titleTagContents = filmPageSoup.find('h1').find('a').string # alternate: filmPageSoup.title.string
+		inParenRegex = re.compile('\([0-9][0-9][0-9][0-9]\)')
+		year = re.search(inParenRegex, titleTagContents)
+		if year:
+			year = year.group()
+			year = ''.join(filter(lambda char: char.isdigit(), year))
+		title = titleTagContents.split('(', 1)[0]
+		title = title.replace(',','').replace('\'','').replace('"','').rstrip()
+		return [filmFileID, title, year]#, review]
+	else:
+		return None
 
 def loop_local(inputDirectory, outputFile):
 	filmWriter = csv.writer(open(outputFile, 'w', newline='', encoding="utf8"))
@@ -55,7 +59,8 @@ def loop_local(inputDirectory, outputFile):
 		if filmRow:
 			filmWriter.writerow(filmRow)
 			print(filmRow)
-		sys.exit(0)
+		if count == 10:
+			sys.exit(0)
 
 
 if __name__=="__main__":
