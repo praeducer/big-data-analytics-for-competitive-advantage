@@ -1,6 +1,6 @@
 # description: Pull film and review data from html files stored locally.
 # authors: Paul Prae
-# since: 3/08/2015
+# since: 4/18/2015
 # data provided by: Bo Pang and Lillian Lee from their 2004 Sentiment Analysis research at Cornell. http://www.cs.cornell.edu/people/pabo/movie-review-data/
 # data set: Polarity dataset (Pool of 27886 unprocessed html files). http://www.cs.cornell.edu/people/pabo/movie-review-data/polarity_html.zip
 # note: tested with Python 3.3 on CentOS 7 and Windows 8 (64 bit)
