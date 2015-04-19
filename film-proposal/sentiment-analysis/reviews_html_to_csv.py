@@ -50,16 +50,27 @@ def mapper(fullFilmFilePath):
 	if not filmPageSoup:
 		return None
 
-	titleTagContents = filmPageSoup.find('h1').find('a').string # alternate: filmPageSoup.title.string
-	# matches any four digit sequence (year) in parentheses
-	inParenRegex = re.compile('\([0-9][0-9][0-9][0-9]\)')
-	year = re.search(inParenRegex, titleTagContents)
-	if year:
-		year = year.group()
-		# digits only
-		year = ''.join(filter(lambda char: char.isdigit(), year))
-	title = titleTagContents.split('(', 1)[0]
-	title = title.replace(',','').replace('\'','').replace('"','').rstrip()
+	titleTagContents = None
+	filmPageH1Tag = filmPageSoup.find('h1')
+	if filmPageH1Tag:
+		filmPageATag = filmPageH1Tag.find('a')
+		if filmPageATag:
+			titleTagContents = filmPageATag.string # alternate: filmPageSoup.title.string
+	if not titleTagContents and filmPageSoup.title:
+		titleTagContents = filmPageSoup.title.string
+
+	year = None
+	title = None
+	if titleTagContents:
+		# matches any four digit sequence (year) in parentheses
+		inParenRegex = re.compile('\([0-9][0-9][0-9][0-9]\)')
+		year = re.search(inParenRegex, titleTagContents)
+		if year:
+			year = year.group()
+			# digits only
+			year = ''.join(filter(lambda char: char.isdigit(), year))
+		title = titleTagContents.split('(', 1)[0]
+		title = title.replace(',','').replace('\'','').replace('"','').rstrip()
 
 	filmPagePTags = filmPageSoup.findAll('p')
 	review = ""
@@ -79,8 +90,16 @@ def mapper(fullFilmFilePath):
 	review = alphaNumRegex.sub(' ', review)
 	review = review.replace('  ',' ').rstrip().lstrip()
 
-	return [filmFileID, title, year, review]
+	if not filmFileID:
+		filmFileID = 'null'
+	if not title:
+		title = 'null'
+	if not year:
+		year = 'null'
+	if not review:
+		review = 'null'
 
+	return [filmFileID, title, year, review]
 
 def loop_local(inputDirectory, outputFile):
 	filmWriter = csv.writer(open(outputFile, 'w', newline='', encoding="utf8"))
@@ -96,10 +115,6 @@ def loop_local(inputDirectory, outputFile):
 		filmRow = mapper(fullFilmFilePath)
 		if filmRow:
 			filmWriter.writerow(filmRow)
-			print(filmRow)
-		if count == 1000:
-			sys.exit(0)
-
 
 if __name__=="__main__":
 
