@@ -4,9 +4,8 @@
 # note: tested with Python 3.3 on CentOS 7 and Windows 8 (64 bit)
 # data provided by: Bo Pang and Lillian Lee from their 2004 Sentiment Analysis research at Cornell. http://www.cs.cornell.edu/people/pabo/movie-review-data/
 # data set: Polarity dataset (Pool of 27886 unprocessed html files). http://www.cs.cornell.edu/people/pabo/movie-review-data/polarity_html.zip
-# TODO: Figure out regex for year
-# TODO: Pull out review text
-# TODO: Consider extracing out meta data. e.g.:
+# Note: There can be multiple reviews for each film
+# TODO: Consider extracting out meta data. e.g.:
 '''
 <PRE>==========
 X-RAMR-ID: 29870
@@ -23,6 +22,7 @@ import sys
 from bs4 import BeautifulSoup
 import csv
 import ntpath
+import string
 
 # TODO: break into find_year, find_title, find_review etc.
 def mapper(fullFilmFilePath):
@@ -30,6 +30,15 @@ def mapper(fullFilmFilePath):
 		filmPage = open(fullFilmFilePath, encoding="utf8")
 	except IsADirectoryError:
 		return None
+
+	filmFileName = ntpath.basename(fullFilmFilePath)
+	filmFileParts = os.path.splitext(filmFileName)
+	filmFileID = filmFileParts[0]
+	filmExtension = filmFileParts[1]
+
+	if filmExtension != '.html':
+		return None
+
 	try:
 		filmPageSoup = BeautifulSoup(filmPage.read())
 	# TODO: Handle or prevent this for real. We lose a sizable subset of the reviews because of this.
@@ -37,40 +46,41 @@ def mapper(fullFilmFilePath):
 	except UnicodeDecodeError:
 		print("\tUnicodeDecodeError!")
 		return None
-	filmFileName = ntpath.basename(fullFilmFilePath)
-	filmFileParts = os.path.splitext(filmFileName)
-	filmFileID = filmFileParts[0]
-	filmExtension = filmFileParts[1]
 
-	# TODO: Do this first thing, before creating soup object.
-	if filmExtension == '.html' and filmPageSoup:
-		titleTagContents = filmPageSoup.find('h1').find('a').string # alternate: filmPageSoup.title.string
-		inParenRegex = re.compile('\([0-9][0-9][0-9][0-9]\)')
-		year = re.search(inParenRegex, titleTagContents)
-		if year:
-			year = year.group()
-			year = ''.join(filter(lambda char: char.isdigit(), year))
-		title = titleTagContents.split('(', 1)[0]
-		title = title.replace(',','').replace('\'','').replace('"','').rstrip()
-
-		review = ""
-		filmPagePTags = filmPageSoup.findAll('p')
-		totalPTagsLeft = len(filmPagePTags)
-		# Concat the strings from every P tags except the last two which 
-		for pTag in filmPagePTags:
-			review += pTag.string
-			totalPTagsLeft -= 1
-			# last two appear to be unnecessary meta data
-			if totalPTagsLeft < 3:
-				break
-
-		# TODO: Make sure I replaced everything I need to and did not do anything redundant.
-		# TODO: Replace all white space with a space.
-		review = review.replace(',','').replace('\'','').replace('"','').replace('\n',' ').rstrip().lstrip()
-
-		return [filmFileID, title, year, review]
-	else:
+	if not filmPageSoup:
 		return None
+
+	titleTagContents = filmPageSoup.find('h1').find('a').string # alternate: filmPageSoup.title.string
+	# matches any four digit sequence (year) in parentheses
+	inParenRegex = re.compile('\([0-9][0-9][0-9][0-9]\)')
+	year = re.search(inParenRegex, titleTagContents)
+	if year:
+		year = year.group()
+		# digits only
+		year = ''.join(filter(lambda char: char.isdigit(), year))
+	title = titleTagContents.split('(', 1)[0]
+	title = title.replace(',','').replace('\'','').replace('"','').rstrip()
+
+	filmPagePTags = filmPageSoup.findAll('p')
+	review = ""
+	totalPTagsLeft = len(filmPagePTags)
+	# Concat the strings from every P tags except the last two which 
+	for pTag in filmPagePTags:
+		if pTag.string:
+			review += pTag.string
+			review += " "
+			totalPTagsLeft -= 1
+		# last two appear to be unnecessary meta data
+		if totalPTagsLeft < 3:
+			break
+
+	# matches only alphanumeric chars
+	alphaNumRegex = re.compile('[\W]+')
+	review = alphaNumRegex.sub(' ', review)
+	review = review.replace('  ',' ').rstrip().lstrip()
+
+	return [filmFileID, title, year, review]
+
 
 def loop_local(inputDirectory, outputFile):
 	filmWriter = csv.writer(open(outputFile, 'w', newline='', encoding="utf8"))
@@ -87,7 +97,7 @@ def loop_local(inputDirectory, outputFile):
 		if filmRow:
 			filmWriter.writerow(filmRow)
 			print(filmRow)
-		if count == 3:
+		if count == 1000:
 			sys.exit(0)
 
 
