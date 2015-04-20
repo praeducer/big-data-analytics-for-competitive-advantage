@@ -11,7 +11,8 @@ import nltk.metrics
 import nltk.classify.util
 from nltk.classify import NaiveBayesClassifier
 from nltk.corpus import movie_reviews
- 
+import random
+
 def word_feats(words):
     return dict([(word, True) for word in words])
  
@@ -27,7 +28,8 @@ poscutoff = int(len(posfeats)*3/4)
 trainfeats = negfeats[:negcutoff] + posfeats[:poscutoff]
 testfeats = negfeats[negcutoff:] + posfeats[poscutoff:]
 print('train on ' + str(len(trainfeats)) + ' instances, test on ' + str(len(testfeats)) + ' instances')
- 
+
+random.shuffle(trainfeats)
 classifier = NaiveBayesClassifier.train(trainfeats)
 
 ### stats ###
