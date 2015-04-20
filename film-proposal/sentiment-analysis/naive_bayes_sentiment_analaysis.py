@@ -38,6 +38,8 @@ posids = movie_reviews.fileids('pos')
 ### training ###
 # build training set. classify training set.
 #trainfeats = negfeats + posfeats
+# TODO: should we shuffle these? Not sure how all positive upfront affects the classifier.
+# e.g. import random; random.shuffle(trainfeats)
 #classifier = NaiveBayesClassifier.train(trainfeats)
 
 ### classify production data ###
