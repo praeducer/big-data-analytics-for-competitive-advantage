@@ -29,6 +29,10 @@ testfeats = negfeats[negcutoff:] + posfeats[poscutoff:]
 print('train on ' + str(len(trainfeats)) + ' instances, test on ' + str(len(testfeats)) + ' instances')
  
 classifier = NaiveBayesClassifier.train(trainfeats)
+
+### stats ###
+# TODO: Consider seeing the distribution: http://www.nltk.org/howto/classify.html
+# print('%.4f %.4f' % (pdist.prob('neg'), pdist.prob('pos')))
 print ('accuracy: ' + str(nltk.classify.util.accuracy(classifier, testfeats)))
 classifier.show_most_informative_features()
 
