@@ -3,6 +3,7 @@
 # since: 4/18/2015
 # data provided by: Bo Pang and Lillian Lee from their 2004 Sentiment Analysis research at Cornell. http://www.cs.cornell.edu/people/pabo/movie-review-data/
 # data set: Polarity dataset (Pool of 27886 unprocessed html files). http://www.cs.cornell.edu/people/pabo/movie-review-data/polarity_html.zip
+# 	This data consists of unprocessed, unlabeled html files from the IMDb archive of the rec.arts.movies.reviews newsgroup, http://reviews.imdb.com/Reviews.
 # note: tested with Python 3.3 on CentOS 7 and Windows 8 (64 bit)
 # TODO: Consider extracting out meta data. e.g.:
 '''
