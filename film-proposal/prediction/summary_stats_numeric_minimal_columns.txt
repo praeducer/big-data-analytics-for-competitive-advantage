@@ -1,0 +1,43 @@
+> summary(fit_Revenue)
+                Length Class  Mode     
+call               5   -none- call     
+type               1   -none- character
+predicted       2257   -none- numeric  
+mse             2000   -none- numeric  
+rsq             2000   -none- numeric  
+oob.times       2257   -none- numeric  
+importance       146   -none- numeric  
+importanceSD      73   -none- numeric  
+localImportance    0   -none- NULL     
+proximity          0   -none- NULL     
+ntree              1   -none- numeric  
+mtry               1   -none- numeric  
+forest            11   -none- list     
+coefs              0   -none- NULL     
+y               2257   -none- numeric  
+test               0   -none- NULL     
+inbag              0   -none- NULL     
+terms              3   terms  call    
+
+> ## r squared
+> cor(RevenuePrediction, test$Revenue)^2
+[1] 0.3485844
+
+> ## root-mean-square error 
+> RMSE <- (sum((RevenuePrediction-test$Revenue)^2)/length(test$Revenue))^(1/2)
+[1] 161201459
+
+> ## find the max observed value
+> maxRevenue <- max(test$Revenue)
+> maxRevenue
+[1] 2064855361
+
+> ## find the min observed value
+> minRevenue <- min(test$Revenue)
+> minRevenue
+[1] 3840.19
+
+## normalized root-mean-square error
+> NRMSE <- (RMSE/(maxRevenue - minRevenue))
+> NRMSE
+[1] 0.07806927
