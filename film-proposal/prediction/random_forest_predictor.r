@@ -1,5 +1,5 @@
 # description: predict the revenue and opening weekend sales of films based on aspects of production using http://en.wikipedia.org/wiki/Random_forest.
-# author: Ben Adelman (Adjusted Approach from Kaggle Competition), Paul Prae (Improved and Evaluated Model)
+# author: Ben Adelman (Adapted approach from Kaggle Competition to fit our data), Paul Prae (Improved and Evaluated Model)
 # since: 4/10/2015
 # citation: inspired by a tutorial for a Kaggle competition written by Trevor Stephens: https://github.com/trevorstephens/titanic
 
