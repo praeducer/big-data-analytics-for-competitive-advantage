@@ -31,7 +31,10 @@ fit_Revenue <- randomForest(as.numeric(Revenue) ~ Budget + MPAA_Rating + Release
 
 ##  stats
 summary(fit_Revenue)
-varImpPlot(fit_Revenue)
+varImpPlot(fit_Revenue, type=1)
+varImpPlot(fit_Revenue, type=2)
+imp <- importance(fit_Revenue)
+imp
 ##  Now to make the prediction... using the model against the test data...
 RevenuePrediction <- predict(fit_Revenue, test, OOB=TRUE, type = "response")
 

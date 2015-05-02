@@ -19,6 +19,83 @@ test               0   -none- NULL
 inbag              0   -none- NULL     
 terms              3   terms  call    
 
+> imp <- importance(fit_Revenue);
+> imp
+                                   %IncMSE IncNodePurity
+Budget                        139.70866374  4.411906e+19
+MPAA_Rating                    13.51161418  4.633247e+18
+Release_in_Winter               3.69890199  4.310971e+17
+Release_in_Spring              -5.65218658  5.431644e+17
+Release_in_Summer              19.23037708  2.942791e+18
+Release_in_Fall                -5.55912886  4.344148e+17
+Release_in_Holiday             10.37644864  1.866122e+18
+Actor_Morgan_Freeman           -2.80148811  5.043528e+17
+Actor_Dennis_Hopper             9.72311866  2.658742e+17
+Actor_Henry_Fonda               0.00000000  1.335739e+15
+Actor_Bruce_Willis             -3.72912208  4.637236e+17
+Actor_Samuel_L__Jackson        -3.31199677  2.702362e+17
+Actor_Robert_De_Niro           -1.28414496  1.675618e+17
+Actor_Burt_Lancaster            0.00000000  8.798349e+14
+Actor_Donald_Sutherland        -6.91224441  9.898334e+16
+Actor_Christopher_Lee          -2.84331704  2.008346e+16
+Actor_John_Wayne                0.00000000  0.000000e+00
+Actor_Keanu_Reeves             -2.69097426  1.345432e+17
+Actor_Nick_Nolte               -2.49875183  6.098706e+16
+Actor_Nicolas_Cage             -1.69417479  1.118518e+17
+Actor_Gene_Hackman             -7.07273640  1.498685e+17
+Actor_Michael_Caine             7.39967552  5.939427e+17
+Actor_Sean_Connery              1.78339135  1.553952e+17
+Actor_Oliver_Hardy              0.00000000  0.000000e+00
+Actor_Stan_Laurel               0.00000000  0.000000e+00
+Actor_Robert_Duvall            -1.98025455  4.564105e+16
+Actor_Susan_Sarandon            1.07600603  5.329694e+16
+Actor_Jack_Nicholson           -7.72177191  1.615323e+17
+Actor_Robert_Downey_Jr_         3.16925125  2.274269e+17
+Actor_Christopher_Walken        0.47026884  1.121264e+17
+Actor_Willem_Dafoe              6.67150908  7.086425e+17
+Actor_James_Stewart             0.00000000  0.000000e+00
+Actor_Dustin_Hoffman           14.21107118  5.125386e+17
+Actor_Robin_Williams            1.62698938  5.726441e+17
+Actor_John_Goodman             -2.24305531  2.582642e+17
+Actor_Dennis_Quaid             -5.93262963  9.802250e+16
+Actor_Harvey_Keitel             0.99012984  2.739786e+16
+Director_Blake_Edwards          0.31467022  2.562381e+16
+Director_Sidney_Lumet           2.07527862  1.184802e+16
+Director_Steven_Spielberg      21.08178114  2.392821e+18
+Director_Spike_Lee             -0.03491383  1.410952e+16
+Director_John_Ford              0.00000000  0.000000e+00
+Director_Robert_Altman          0.21644388  7.732947e+15
+Director_Charlie_Chaplin        0.00000000  0.000000e+00
+Director_Vincente_Minnelli      0.00000000  0.000000e+00
+Director_Woody_Allen            4.98942214  4.224976e+16
+Director_Clint_Eastwood        13.77060390  1.382173e+17
+Director_Martin_Scorsese       -8.32398420  6.753275e+16
+Director_Ingmar_Bergman         0.00000000  0.000000e+00
+Director_Howard_Hawks           0.00000000  0.000000e+00
+Director_John_Huston            0.00000000  3.246304e+15
+Director_Raoul_Walsh            0.00000000  0.000000e+00
+Director_Chuck_Jones            0.00000000  0.000000e+00
+Director_Werner_Herzog          0.00000000  1.916693e+14
+Director_Fritz_Lang             0.00000000  0.000000e+00
+Director_Steven_Soderbergh     -0.56394179  2.123155e+16
+Director_Michael_Curtiz         0.00000000  0.000000e+00
+Director_Francis_Ford_Coppola  -3.22731687  1.582641e+15
+Director_Roger_Corman           0.00000000  0.000000e+00
+Director_Alfred_Hitchcock       0.00000000  0.000000e+00
+Director_Friz_Freleng           0.00000000  0.000000e+00
+Director_Anthony_Mann           0.00000000  0.000000e+00
+Director_Norman_Taurog          0.00000000  0.000000e+00
+Director_Akira_Kurosawa         0.00000000  0.000000e+00
+Genre_comedy                   15.90765440  1.696219e+18
+Genre_drama                    16.41090148  1.373408e+18
+Genre_romantic                  7.47949073  9.876728e+17
+Genre_science_fiction         -11.67339837  1.149112e+18
+Genre_crime                     6.96513550  3.125570e+17
+Genre_action                   17.70200403  1.173133e+18
+Genre_thriller                  8.23162895  1.162443e+18
+Genre_horror                   11.49688742  5.274949e+17
+Genre_animated                 18.62290149  3.013846e+18
+
 > ## r squared
 > cor(RevenuePrediction, test$Revenue)^2
 [1] 0.3485844
