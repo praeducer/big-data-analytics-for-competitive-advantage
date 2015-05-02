@@ -14,6 +14,7 @@ possible_films <- read.csv("./data/input/possible_films.csv")
 training_data$Budget <- as.numeric(as.character(training_data$Budget))
 training_data$Revenue <- as.numeric(as.character(training_data$Revenue))
 training_data$Weekend_Total <- as.numeric(as.character(training_data$Revenue))
+possible_films$Budget <- as.numeric(as.character(possible_films$Budget))
 
 ##  set up the random forest model for predicting Total Revenue and Opening Weekend Sales
 # configuratioin: as.numeric, importance=TRUE, ntree=2000
