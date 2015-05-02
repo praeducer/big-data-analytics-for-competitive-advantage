@@ -40,7 +40,8 @@ RevenuePrediction <- predict(fit_Revenue, test, OOB=TRUE, type = "response")
 
 ## more stats
 ## estimated versus observed values
-plot(test$Revenue, RevenuePrediction)
+options(scipen=5)
+plot(test$Revenue, RevenuePrediction, xlab="Actual Revenue", ylab="Predicted Revenue")
 
 ## r squared
 cor(RevenuePrediction, test$Revenue)^2
@@ -62,4 +63,4 @@ NRMSE
 
 ## save 'em
 test$RevenuePrediction <- RevenuePrediction
-write.csv(test, file = "./data/test_predictions.csv", row.names = TRUE)
+write.csv(test, file = "./data/output/test_predictions.csv", row.names = TRUE)
