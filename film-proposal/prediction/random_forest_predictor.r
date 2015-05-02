@@ -30,7 +30,7 @@ varImpPlot(fit_Revenue)
 summary(fit_Weekend_Total)
 varImpPlot(fit_Weekend_Total)
 
-##  Now to make the prediction... using the model against the test data...
+##  Now to make the prediction... using the model against all possible film combinations data...
 RevenuePrediction <- predict(fit_Revenue, possible_films, OOB=TRUE, type = "response")
 WeekendTotalPrediction <- predict(fit_Weekend_Total, possible_films, OOB=TRUE, type = "response")
 
