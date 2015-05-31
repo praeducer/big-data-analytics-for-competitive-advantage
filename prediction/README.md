@@ -27,7 +27,7 @@ New csv’s identical to the inputs but with new columns for Revenue and Opening
 Overview:
 + To provide a measure of how well observed outcomes are replicated by our model, we calculated the squared correlation coefficient. With an R-squared of 0.3485844, this means that about 35% of the variance of our model is explained.
 + Representative of our R-squared value, after plotting Estimated Revenue compared to Actual Revenue we can see that our predictions are somewhat inline with our observed values.
-+ To measure the importance of our film features  (i.e. how much each variable influenced our prediction in a good way), we observed the increase in mean squared error. After plotting this for all variables, Budget is the most influential factor. + Shortly following is having Steven Spielberg as a director and releasing in the summer, which are both attributes we settled on for our proposed film.
++ To measure the importance of our film features  (i.e. how much each variable influenced our prediction in a good way), we observed the increase in mean squared error. After plotting this for all variables, Budget is the most influential factor. Shortly following is having Steven Spielberg as a director and releasing in the summer, which are both attributes we settled on for our proposed film.
 + Another measure we used to understand the accuracy of our model was the normalized root-mean-square error (NRMSE). It is a frequently used measure of the differences between values predicted by a model or an estimator and the values actually observed. At about 8% NRMSE, we do not have much residual variance (i.e. unexplained variance) according to this metric.
 
 ### Measuring Variability: Squared Correlation Coefficient (R-squared)
