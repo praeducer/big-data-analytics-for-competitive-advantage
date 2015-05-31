@@ -13,7 +13,11 @@ competitive advantage during industry transition.
 
 ## Team Members
 + Paul Prae
++ Daniel Joensen
 + Sarah Vasquez
 + Joy Pinchback
-+ Daniel Joensen
 + Benjamin Adelman
+
+### Developers
++ Paul Prae
++ Daniel Joensen
