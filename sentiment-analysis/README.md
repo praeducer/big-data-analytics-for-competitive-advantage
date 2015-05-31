@@ -61,3 +61,29 @@ We first assessed the model against training and test data. We first trained on 
 After we were comfortable with our test results, we ran the model on our production data set gathered from the IMDb archive of the rec.arts.movies.reviews newsgroup, see http://www.cs.cornell.edu/people/pabo/movie-review-data/ and http://reviews.imdb.com/Reviews for more information. We were able to process a total of 21,707 movie reviews. Most of them resulted in positive sentiment. They were also mostly from certain years, biased by our data source.
 
 ![Total Negative Positive Sentiment](https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/sentiment-analysis/TotalNegativePositiveSentiment.jpg "Total Negative Positive Sentiment")
+
+![Sentiments Over Years](https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/sentiment-analysis/SentimentsOverYears.jpg "Sentiments Over Years")
+
+![Distribution Sentiments Over Years](https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/sentiment-analysis/DistributionSentimentsOverYears.jpg "Distribution Sentiments Over Years")
+
+## Evaluation of this approach
+Much of the evaluation was already discussed under the advantages and disadvantages of our training lexicon and of our method. Here we will elaborate a little more and discuss our steps moving forward.
+
+### How reliable and valid is it
+Our accuracy is acceptable for such a naive approach. Our errors rates, though, varied greatly in quality depending on which measure we were examining. Please see our section on statistics above for the results of our calculations. Our model is excellent at identifying positive sentiment when it is present. Our 98% recall was great to see. The problem was that our classifier was overly optimistic, so to say. It often thought sentiment was positive when it was not, giving us barely over 65% precision for positive sentiment. On the flip-side to this, the classifier was not able to identify all of the positives because it labeled a good portion of them as negative. We had only 47% recall of negative sentiment. In the case of our negative sentiment precision, it was up there at almost 96%. This left us with few false positives in this case at least. Overall, not bad and plenty of room for improvement. Another good part about this classifier is that it is completely predictable and easily reproducible. It perform at this effectiveness every time. 
+
+### How it could be improved
+We would start by addressing the disadvantages mentioned in the bullets above. Given more time, there is a lot of testing we could do. Simply running through several methods and algorithms and comparing their accuracy and error measures would be an excellent start. To truly calculate if the sentiments are acceptable, it would be best to cross-reference our results with IMBd and Rotten Tomatoes ratings. 
+
+Assuming we try to improve our approach with a naive bayes classifier:
++ We could take into account term frequency in our bag-of-words model.
++ Given a higher-quality, more diverse, and bigger lexicon, we could see even better results. 
++ We could pass in n-grams of words instead of single words. This may help establish meaningful relationships between the words. Even up to a trigram may have provided great results. 
++ We could remove words that proved not to be informative, or can typically be misleading, from the training set. Cleaning up the lexicon in general to prepare it for this specific type of classifier would be a great step.
+
+If we are to test other methods:
++ We could run through the same type of approach but with other types of classifiers known to be more accurate such as random forests, boosted trees, or neural networks. 
++ Just like as above, with a higher-quality, more diverse, and bigger lexicon, we could see even better results. We could even test multiple approaches against multiple lexicons to see which combination is best.
+
+## Early Challenges
+We did attempt to use Rotten Tomatoes for gathering reviews for the films we were assessing in our prediction model. We planned to use their API since they do not allow web crawling, especially at high volumes. We began this approach after obtaining our developer keys. Our code for this could be found here: https://github.com/praeducer/big-data-analytics-for-competitive-advantage/blob/master/film-proposal/sentiment-analysis/download_rotten_reviews.py. We were also going to use Rotten Tomatoes for cross-referencing our sentiment results to help determine reliability. Despite what was claimed in their documentation as of April 2015 and earlier, http://developer.rottentomatoes.com/docs, the API is not free. After waiting many days for our developer keys to get approved, we emailed them to see what the delay was. As was discussed through email, they now charge for the API.
