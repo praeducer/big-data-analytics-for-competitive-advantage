@@ -27,6 +27,7 @@ All scripts should be ran from the same location. This location should have a di
 + Some scripts will also output the state of the script to the terminal but this is for logging only.
 + When pulling any entity from Wikipedia, we also grab the URL that represents that entity. This is perfect for uniquely identifying an entity such as a film or an actor. These URLs can then be used to join different data sets.
 
+## Data Collection from Wikipedia
 ### Step One: Extract the Films URLs
 ##### film_url_extractor.py
 This script will extract film titles, film Wikipedia URLs, and film release year (because year happened to be easy to collect during this process) from the 'List of Films' article on Wikipedia. This list is organized by year and is also organized alphabetically. We found alphabetically to be a more straightforward approach to mine.
