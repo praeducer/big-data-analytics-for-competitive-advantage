@@ -11,13 +11,6 @@ extracting intelligence and value from data.
 relationships, open new market opportunities, and/or better position the organization for
 competitive advantage during industry transition.
 
-## Team Unicornado Members
-+ Paul Prae
-+ Daniel Joensen
-+ Sarah Vasquez
-+ Joy Pinchback
-+ Benjamin Adelman
-
 # Term Project Overview
 ## Business Need
 Understand trends in the film industry in order to use predictive analysis to determine what type of movie will yield the highest return on investment.
