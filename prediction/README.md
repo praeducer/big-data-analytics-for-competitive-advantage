@@ -55,6 +55,7 @@ Representative of our R-squared value, we can see that our predictions are somew
 To measure the importance of our film features  (i.e. how much each variable influenced our prediction in a good way), we observed the increase in mean squared error.
 
 “The mean squared error (MSE) of an estimator measures the average of the squares of the ‘errors’, that is, the difference between the estimator and what is estimated. The difference occurs because of randomness or because the estimator doesn't account for information that could produce a more accurate estimate.”
+
 If ![Vector of predictions](http://upload.wikimedia.org/math/f/3/e/f3e3835fc00ac33904a281e254e2580f.png "Vector of predictions") is a vector of *n* predictions, and ![Vector of true values](http://upload.wikimedia.org/math/5/7/c/57cec4137b614c87cb4e24a3d003a3e0.png "Vector of true values") is the vector of the true values, then the (estimated) MSE of the predictor is:
 
 ![mean squared error](http://upload.wikimedia.org/math/0/9/7/0978fe57785f6ce707efd6bd90550552.png "mean squared error")
@@ -75,6 +76,7 @@ As you can see, Budget is the most influential factor. Shortly following is havi
 Another measure we used to understand the accuracy of our model was the root-mean-square deviation (RMSD) or root-mean-square error (RMSE). 
 
 “It is a frequently used measure of the differences between values (sample and population values) predicted by a model or an estimator and the values actually observed. Basically, the RMSD represents the sample standard deviation of the differences between predicted values and observed values.”
+
 The RMSD of predicted values ![predicted values](http://upload.wikimedia.org/math/b/1/8/b1859f53476576f41148b5ef77bafa19.png "predicted values") for times *t* of a regression's dependent variable ![dependent variable](http://upload.wikimedia.org/math/4/1/5/415290769594460e2e485922904f345d.png "dependent variable") is computed for n different predictions as the square root of the mean of the squares of the deviations:
 
 ![root mean squared deviation](http://upload.wikimedia.org/math/1/7/3/173e0dd312ace976dbc640af8f9014b8.png "root mean squared deviation")
@@ -113,4 +115,4 @@ In the programming language R, we calculated this as follows:
 > NRMSE
 [1] 0.07806927
 
-At about 8%, we do not have much residual variance (i.e. unexplained variance). Using this measurement of accuracy, our model appears to be significantly better than what R2 estimated (it indicated 65% unexplained variance). One thing should be noted that each of the formulas used have several variations. There are even some formulas for R2 that incorporate MSE into it’s definition. Moving forward, other variations of the formulas could be tested and we could perform more research to see which formulas are the most valid ways to measure the performance of our model.
+At about 8%, we do not have much residual variance (i.e. unexplained variance). Using this measurement of accuracy, our model appears to be significantly better than what R-squared estimated (it indicated 65% unexplained variance). One thing should be noted that each of the formulas used have several variations. There are even some formulas for R-squared that incorporate MSE into it’s definition. Moving forward, other variations of the formulas could be tested and we could perform more research to see which formulas are the most valid ways to measure the performance of our model.
