@@ -11,8 +11,7 @@ extracting intelligence and value from data.
 relationships, open new market opportunities, and/or better position the organization for
 competitive advantage during industry transition.
 
-# Team Unicornado
-## Members
+# Team Unicornado Members
 + Paul Prae
 + Daniel Joensen
 + Sarah Vasquez
