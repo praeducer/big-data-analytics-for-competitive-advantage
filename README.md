@@ -25,7 +25,7 @@ Assuming a $100MM budget, our predicted successful film is a science fiction mov
 + Data Storage - Microsoft Excel or CSV’s on a local file system
 + Data Mining and Processing - Python 3 (Main libraries: BeautifulSoup, Wikipedia, NLTK, urllib, requests)
 + Data Transformation and Analysis - Microsoft Excel, SAS
-+ Data Vizualization – Tableua, Microsoft Excel
++ Data Vizualization – Tableau, Microsoft Excel
 + Predictive Modeling - R
 + Version Control - Git
 
