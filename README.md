@@ -19,16 +19,11 @@ competitive advantage during industry transition.
 + Joy Pinchback
 + Benjamin Adelman
 
-## Developers
-+ Paul Prae
-+ Daniel Joensen
-
-# Term Project
-## Technical Summary
-### Business Need
+# Term Project Overview
+## Business Need
 Understand trends in the film industry in order to use predictive analysis to determine what type of movie will yield the highest return on investment.
 
-### Tools used
+## Tools used
 + Data Sources - Wikipedia, Box Office Mojo, Rotten Tomatoes
 + Processing Platform - A Linux (CentOS) instance hosted on Amazon EC2 
 + Data Storage - Microsoft Excel or CSV’s on a local file system
@@ -38,17 +33,17 @@ Understand trends in the film industry in order to use predictive analysis to de
 + Predictive Modeling - R
 + Version Control - Git
 
-### Data Collection Summary
+## Data Collection Summary
 Using Python, we performed the following steps:
 1. Created a primary list of all movies listed in the alphabetical indexes found in the following link: http://en.wikipedia.org/wiki/Lists_of_films#Alphabetical_indices
 2. Downloaded each movie page locally to prevent repeated web requests.
 3. Extracted the relevant data fields by web mining the local files. Most of the data was extracted from Wikipedia’s Summary table from the HTML source of the film’s Wikipedia page. Increased speed of our data collection script by following a MapReduce paradigm. Fields extracted from Wikipedia:
-a. Release Date
-b. Budget
-c. Revenue
-d. Director(s)
-e. Starring Actors(s)
-f. Production Company(s)
+..1. Release Date
+..2. Budget
+..3. Revenue
+..4. Director(s)
+..5. Starring Actors(s)
+..6. Production Company(s)
 4. We still needed to extract Genre for each movie, which was more challenging due to the fact that it was contained within the text of the Wikipedia page itself.  We used Python to perform some basic natural language processing. Here were our steps:
 a. Target the introductory paragraph on each film’s Wikipedia page
 b. Split the paragraph into sentences
@@ -75,7 +70,7 @@ b. Producers - http://en.wikipedia.org/wiki/List_of_film_production_companies
 c. Directors - http://en.wikipedia.org/wiki/Film_director
 8. Finally, SAS was used to clean some of the data (e.g. to remove single quotes, duplicates, etc.), to create our Excel Database, and to create a sample report.
 
-### Data Processing and Analysis Summary:
+## Data Processing and Analysis Summary:
 1. We used SAS to: reformat data; parse and create flags (0/1) forexistence of notable directors, producers, and actors; generate the updated Excel database.
 2. Our next challenge was joining the two datasets together (Wikipedia and Box Office Mojo), which we accomplished using SAS and the film title and release year fields.
 3. Once the datasets were combined into a single database, we manually cleaned up any fields that did not have complete data.  We removed rows based on the following criteria: no match in the Box Office Mojo dataset, missing Revenue or Budget fields, missing predictive fields.
