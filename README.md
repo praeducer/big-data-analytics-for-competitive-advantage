@@ -16,6 +16,9 @@ competitive advantage during industry transition.
 ## Business Need
 Understand trends in the film industry in order to use predictive analysis to determine what type of movie will yield the highest return on investment.
 
+## Conclusion
+Assuming a $100MM budget, our predicted successful film is a science fiction movie starring Samuel L. Jackson directed by Steven Spielberg released in the summer.
+
 ## Tools used
 + Data Sources - Wikipedia, Box Office Mojo, Rotten Tomatoes
 + Processing Platform - A Linux (CentOS) instance hosted on Amazon EC2 
