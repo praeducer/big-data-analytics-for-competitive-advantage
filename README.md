@@ -35,7 +35,8 @@ Understand trends in the film industry in order to use predictive analysis to de
 
 ## Data Collection Summary
 Using Python, we performed the following steps:
-1. Created a primary list of all movies listed in the alphabetical indexes found in the following link: http://en.wikipedia.org/wiki/Lists_of_films#Alphabetical_indices
+
+1. Created a primary list of all movies listed in the alphabetical indexes found in the following link: http://en.wikipedia.org/wiki/Lists_of_films#Alphabetical_indices.
 2. Downloaded each movie page locally to prevent repeated web requests.
 3. Extracted the relevant data fields by web mining the local files. Most of the data was extracted from Wikipedia’s Summary table from the HTML source of the film’s Wikipedia page. Increased speed of our data collection script by following a MapReduce paradigm. Fields extracted from Wikipedia:
   1. Release Date
