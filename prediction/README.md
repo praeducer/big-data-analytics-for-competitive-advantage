@@ -75,7 +75,7 @@ As you can see, Budget is the most influential factor. Shortly following is havi
 Another measure we used to understand the accuracy of our model was the root-mean-square deviation (RMSD) or root-mean-square error (RMSE). 
 
 “It is a frequently used measure of the differences between values (sample and population values) predicted by a model or an estimator and the values actually observed. Basically, the RMSD represents the sample standard deviation of the differences between predicted values and observed values.”
-The RMSD of predicted values ![predicted values](hhttp://upload.wikimedia.org/math/b/1/8/b1859f53476576f41148b5ef77bafa19.png "predicted values") for times *t* of a regression's dependent variable ![dependent variable](http://upload.wikimedia.org/math/4/1/5/415290769594460e2e485922904f345d.png "dependent variable") is computed for n different predictions as the square root of the mean of the squares of the deviations:
+The RMSD of predicted values ![predicted values](http://upload.wikimedia.org/math/b/1/8/b1859f53476576f41148b5ef77bafa19.png "predicted values") for times *t* of a regression's dependent variable ![dependent variable](http://upload.wikimedia.org/math/4/1/5/415290769594460e2e485922904f345d.png "dependent variable") is computed for n different predictions as the square root of the mean of the squares of the deviations:
 
 ![root mean squared deviation](http://upload.wikimedia.org/math/1/7/3/173e0dd312ace976dbc640af8f9014b8.png "root mean squared deviation")
 
@@ -83,19 +83,16 @@ The RMSD of predicted values ![predicted values](hhttp://upload.wikimedia.org/ma
 
 We executed this same formula in the programming language R:
 
-> ## root-mean-square error 
 > RMSE <- (sum((RevenuePrediction-test$Revenue)^2)/length(test$Revenue))^(1/2)
 
 Our result was 161,201,459.
 
 The fact that it is a large variation may be influenced by some outliers in our data and some huge blockbusters (think movies like Star Wars that have franchises). This, of course, is not as useful without placing it in the context of the magnitude of our values, which can get quite large themselves. The minimum and maximum values of our observed revenue variable are:
 
-> ## find the max observed value
 > maxRevenue <- max(test$Revenue)
 > maxRevenue
 [1] 2,064,855,361
 
-> ## find the min observed value
 > minRevenue <- min(test$Revenue)
 > minRevenue
 [1] 3,840.19
@@ -112,7 +109,6 @@ This value is commonly referred to as the normalized root-mean-square deviation 
 
 In the programming language R, we calculated this as follows:
 
-> ## normalized root-mean-square error
 > NRMSE <- (RMSE/(maxRevenue - minRevenue))
 > NRMSE
 [1] 0.07806927
