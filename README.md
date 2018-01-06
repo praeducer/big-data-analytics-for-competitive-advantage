@@ -35,36 +35,36 @@ Using Python, we performed the following steps:
 1. Created a primary list of all movies listed in the alphabetical indexes found in the following link: http://en.wikipedia.org/wiki/Lists_of_films#Alphabetical_indices.
 2. Downloaded each movie page locally to prevent repeated web requests.
 3. Extracted the relevant data fields by web mining the local files. Most of the data was extracted from Wikipedia’s Summary table from the HTML source of the film’s Wikipedia page. Increased speed of our data collection script by following a MapReduce paradigm. Fields extracted from Wikipedia:
-  1. Release Date
-  2. Budget
-  3. Revenue
-  4. Director(s)
-  5. Starring Actors(s)
-  6. Production Company(s)
+    1. Release Date
+    2. Budget
+    3. Revenue
+    4. Director(s)
+    5. Starring Actors(s)
+    6. Production Company(s)
 4. We still needed to extract Genre for each movie, which was more challenging due to the fact that it was contained within the text of the Wikipedia page itself.  We used Python to perform some basic natural language processing. Here were our steps:
-  1. Target the introductory paragraph on each film’s Wikipedia page
-  2. Split the paragraph into sentences
-  3. Target the first sentence of the paragraph, where the Genre name was commonly found
-  4. Remove any non-alphabetical characters
-  5. Split that sentence into words
-  6. Check that list of words against a list of Genres
-  7. Return the word if a match was found
+    1. Target the introductory paragraph on each film’s Wikipedia page
+    2. Split the paragraph into sentences
+    3. Target the first sentence of the paragraph, where the Genre name was commonly found
+    4. Remove any non-alphabetical characters
+    5. Split that sentence into words
+    6. Check that list of words against a list of Genres
+    7. Return the word if a match was found
 5. Web mined additional data fields from Box Office Mojo (IMDB): 
-  1. Created a primary list of film urls listed on Box Office Mojo’s alphabetical index.
-  2. Visited each film page and extracted the following fields:
-    1. Movie name
-    2. MPAA rating
-    3. Run time
-    4. Opening Weekend total sales
-    5. Domestic total sales
-    6. Global total sales
-    7. Number of theaters (widest release)
-    8. Release date.
+    1. Created a primary list of film urls listed on Box Office Mojo’s alphabetical index.
+    2. Visited each film page and extracted the following fields:
+        1. Movie name
+        2. MPAA rating
+        3. Run time
+        4. Opening Weekend total sales
+        5. Domestic total sales
+        6. Global total sales
+        7. Number of theaters (widest release)
+        8. Release date.
 6. After the film data extraction, we stored each movie as a row and each associated piece of data as a column in a CSV.
 7. Web mined lists (saved initially as CSV’s) of notable actors, producers, and directors found at the URL’s listed below. These lists were gathered and stored as separate tables in the Excel database for later analysis:
-  1. Actors - http://en.wikipedia.org/wiki/Screen_Actors_Guild_Award
-  2. Producers - http://en.wikipedia.org/wiki/List_of_film_production_companies
-  3. Directors - http://en.wikipedia.org/wiki/Film_director
+    1. Actors - http://en.wikipedia.org/wiki/Screen_Actors_Guild_Award
+    2. Producers - http://en.wikipedia.org/wiki/List_of_film_production_companies
+    3. Directors - http://en.wikipedia.org/wiki/Film_director
 8. Finally, SAS was used to clean some of the data (e.g. to remove single quotes, duplicates, etc.), to create our Excel Database, and to create a sample report.
 
 ## Data Processing and Analysis Summary:
